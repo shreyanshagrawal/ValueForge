@@ -99,21 +99,49 @@ def seed_database():
         claim_codes = [c[0] for c in claims_data]
         category_codes = [c.code for c in categories]
 
+        # Engineer claim distribution per category
+        cat_distributions = {}
+        for cat in category_codes:
+            # deterministic shuffle for consistency
+            shuffled_claims = list(claim_codes)
+            random.shuffle(shuffled_claims)
+            cat_distributions[cat] = {
+                "saturated": shuffled_claims[:4],   # 4 saturated claims
+                "rare": shuffled_claims[4:9],       # 5 rare claims
+                "moderate": shuffled_claims[9:]     # 21 moderate claims
+            }
+
         competitors = []
-        for i in range(120):
-            cat = random.choice(category_codes)
-            tier = random.choice(price_tiers)
-            brand = random.choice(brands)
-            num_claims = random.randint(2, 4)
-            p_claims = random.sample(claim_codes, num_claims)
-            comp = CompetitorProduct(
-                product_name=f"{brand} {cat.replace('_', ' ').title()} {i}",
-                category_code=cat,
-                price_tier=tier,
-                brand_name=brand,
-                claim_codes=p_claims
-            )
-            competitors.append(comp)
+        prod_id = 0
+        for cat in category_codes:
+            dist = cat_distributions[cat]
+            for tier in price_tiers:
+                for i in range(25): # 25 products per tier = 100 per category = 500 total
+                    prod_id += 1
+                    brand = random.choice(brands)
+                    
+                    p_claims = []
+                    for _ in range(random.randint(2, 5)):
+                        r = random.random()
+                        if r < 0.65:
+                            p_claims.append(random.choice(dist["saturated"]))
+                        elif r < 0.90:
+                            p_claims.append(random.choice(dist["moderate"]))
+                        else:
+                            p_claims.append(random.choice(dist["rare"]))
+                    
+                    p_claims = list(set(p_claims)) # Deduplicate
+                    if not p_claims:
+                        p_claims.append(random.choice(dist["saturated"]))
+
+                    comp = CompetitorProduct(
+                        product_name=f"{brand} {cat.replace('_', ' ').title()} {prod_id}",
+                        category_code=cat,
+                        price_tier=tier,
+                        brand_name=brand,
+                        claim_codes=p_claims
+                    )
+                    competitors.append(comp)
         
         db.add_all(competitors)
         db.commit()
