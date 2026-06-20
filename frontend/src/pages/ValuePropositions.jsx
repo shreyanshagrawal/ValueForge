@@ -62,7 +62,7 @@ function ValuePropositions() {
 
   return (
     <div>
-      <Stepper currentStep={3} />
+      <Stepper scanId={scanId} />
       
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
         <h2>Product Value Propositions</h2>
