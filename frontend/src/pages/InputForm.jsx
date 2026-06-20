@@ -21,7 +21,7 @@ const EXAMPLES = [
     data: {
       product_name: "Zenith Energy",
       category_code: "energy_drinks",
-      persona_code: "fitness_enthusiast",
+      persona_code: "fitness_millennial",
       primary_benefit_idea: "A plant-based, no sugar energy drink optimized for sustained performance and focus.",
       key_ingredient: "Matcha",
       target_price_tier: "ultra_premium",

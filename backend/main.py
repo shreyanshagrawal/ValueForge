@@ -47,6 +47,6 @@ app.add_middleware(
 )
 
 app.include_router(health.router, prefix="/api", tags=["Health"])
-app.include_router(reference.router, prefix="/api/v1", tags=["Reference"])
+app.include_router(reference.router, prefix="/api/v1/reference", tags=["Reference"])
 app.include_router(scans.router, prefix="/api/v1/scans", tags=["Scans"])
 app.include_router(whitespace.router, prefix="/api/v1/scans", tags=["Whitespace"])
