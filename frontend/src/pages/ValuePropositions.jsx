@@ -163,9 +163,36 @@ function ValuePropositions() {
             {/* Details Area */}
             <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1.5rem', flexGrow: 1 }}>
               
-              {/* Score Badges */}
+              {/* Score Badges & FOS Math Breakdown */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <details style={{ backgroundColor: 'var(--bg-color)', padding: '0.75rem', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+                  <summary style={{ fontSize: '0.75rem', fontWeight: 'bold', textTransform: 'uppercase', color: 'var(--primary-teal)', cursor: 'pointer', outline: 'none' }}>
+                    🔍 See FOS Math Breakdown
+                  </summary>
+                  <div style={{ marginTop: '0.75rem', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+                    <p style={{ margin: '0 0 0.5rem 0', fontStyle: 'italic' }}>
+                      Final Opportunity Score (FOS) = Market (35%) + Consumer (40%) + Brand (25%)
+                    </p>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #e2e8f0', paddingBottom: '4px', marginBottom: '4px' }}>
+                      <span>Market Openness (100 - {vp.tier_cds_score?.toFixed(1)}) * 0.35:</span>
+                      <strong>{((100 - vp.tier_cds_score) * 0.35).toFixed(1)}</strong>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #e2e8f0', paddingBottom: '4px', marginBottom: '4px' }}>
+                      <span>Consumer Response (CRS {vp.crs_score?.toFixed(1)}) * 0.40:</span>
+                      <strong>{(vp.crs_score * 0.40).toFixed(1)}</strong>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #e2e8f0', paddingBottom: '4px', marginBottom: '4px' }}>
+                      <span>Brand Permission (BPS {vp.bps_score?.toFixed(1)}) * 0.25:</span>
+                      <strong>{(vp.bps_score * 0.25).toFixed(1)}</strong>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 'bold', color: 'var(--primary-navy)' }}>
+                      <span>= Final Opportunity Score (FOS)</span>
+                      <span>{vp.fos_score?.toFixed(1)} / 100</span>
+                    </div>
+                  </div>
+                </details>
+
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '0.5rem' }}>
                   <strong style={{ fontSize: '0.75rem', textTransform: 'uppercase', color: 'var(--text-muted)' }}>Tier-CDS</strong>
                   <span style={{ fontSize: '0.75rem', padding: '0.25rem 0.5rem', borderRadius: '4px', backgroundColor: vp.cds_zone === 'green' ? 'var(--color-true-ws)' : vp.cds_zone === 'yellow' ? 'var(--color-conditional)' : 'var(--color-contested)', color: 'white' }}>
                     {vp.tier_cds_score?.toFixed(1)} ({vp.cds_zone})
