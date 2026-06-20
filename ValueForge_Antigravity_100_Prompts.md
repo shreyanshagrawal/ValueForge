@@ -869,11 +869,11 @@ Take a final pass reviewing everything end to end as if you were a skeptical hac
 ---
 
 🔲 **CHECKPOINT 19 — verify before continuing:**
-- [ ] You have a clear FR-by-FR completeness report
-- [ ] The highest-impact gap identified has been addressed
-- [ ] Applicable NFRs have been verified against real measurements
-- [ ] DEMO_SCRIPT.md exists and is genuinely presentable
-- [ ] The 3-dimension reasoning is now visually transparent somewhere in the UI, not just a backend calculation
+- [x] You have a clear FR-by-FR completeness report
+- [x] The highest-impact gap identified has been addressed
+- [x] Applicable NFRs have been verified against real measurements
+- [x] DEMO_SCRIPT.md exists and is genuinely presentable
+- [x] The 3-dimension reasoning is now visually transparent somewhere in the UI, not just a backend calculation
 
 ---
 
