@@ -1,370 +1,369 @@
-# ValueForge — UI Specification for Redesign
-**Version 1.0 | Prepared for UI Team**
+# ValueForge — Feature & Functionality Spec
+**For the UI Team | Version 2.0**
 
-> **Context for the AI generating this UI:**  
-> ValueForge is a B2B SaaS tool for CPG brand strategists and product managers. Think McKinsey slide-deck meets Bloomberg terminal — the aesthetic should feel authoritative, data-dense, and premium. The target user is a senior brand manager or product innovation lead at an FMCG company. They are comfortable reading data-heavy dashboards. The current prototype uses a dark-navy glassmorphism design that works well for demos, but the UI team should feel free to evolve the visual language while keeping the **analytical and trustworthy** tone. This is not a consumer app.
-
----
-
-## Design System Principles
-
-- **Tone:** Strategic, analytical, premium. Not playful.
-- **Color Priority:** A multi-tier semantic color system is core to the product. These colors are *functional*, not decorative:
-  - **Green (`#10b981`):** "True Whitespace" — the holy grail, a confirmed opportunity.
-  - **Yellow (`#eab308`):** "Conditional" — opportunity exists, but with risks.
-  - **Orange (`#f97316`):** "Brand Whitespace" — market is open but the brand may lack permission.
-  - **Red (`#ef4444`):** "Contested" — saturated, avoid.
-  - **Gray (`#64748b`):** "Consumer Whitespace" — consumer interest exists but market is low.
-- **Typography:** Use a professional sans-serif (Inter, DM Sans, or similar). No display fonts.
-- **Data visualization:** The product is *built around* charts and data grids. These must be pixel-perfect and readable, not decorative.
+This document describes every screen, every button, every data field, and every interaction in the application. Design decisions are entirely up to you.
 
 ---
 
-## Application Structure
+## Application Flow Overview
 
-The application is a **multi-step linear wizard** after initial form submission. A persistent `Stepper` navigation bar appears on every result screen.
+ValueForge is a linear wizard. The user fills out a form, submits it, and is taken through 4 result screens in order. A persistent navigation bar appears on all 4 result screens.
 
-### URL/Route Map
 ```
-/                           → Input Form (start a new scan)
-/scan/:scanId/failures      → Step 1: Historical Failure Dashboard
-/scan/:scanId/grid          → Step 2: Whitespace Opportunities Map (matrix grid)
-/scan/:scanId/territory     → Step 3: Authentic Claim Territory (radar chart)
-/scan/:scanId/propositions  → Step 4: AI Value Proposition Cards (final output)
+Home (Input Form)
+  ↓ (after scan completes)
+Step 1: Failure Dashboard      /scan/:scanId/failures
+  ↓
+Step 2: Whitespace Grid        /scan/:scanId/grid
+  ↓
+Step 3: Authentic Territory    /scan/:scanId/territory
+  ↓
+Step 4: Value Propositions     /scan/:scanId/propositions
 ```
 
-### Global Navigation / Header
-- **Logo/Name:** "ValueForge" in the top-left.
-- **The header should be minimal.** The primary navigation is the in-page `Stepper` within scan flows, not a sidebar.
-- A "New Scan" / "Home" button should always be accessible (top-right or in nav bar).
-- **No sidebar navigation.** The flow is strictly linear.
+---
+
+## Global: Stepper Navigation Bar
+
+**Appears on:** All 4 result screens.
+
+**Purpose:** Lets the user know which step they're on and navigate between steps freely.
+
+**Contents:**
+- 4 numbered links:
+  1. Failures → `/scan/:scanId/failures`
+  2. Whitespace Grid → `/scan/:scanId/grid`
+  3. Authentic Territory → `/scan/:scanId/territory`
+  4. Propositions → `/scan/:scanId/propositions`
+- The current active step is visually distinguishable from the others.
+- All steps are clickable links (free backward and forward navigation).
+- A badge on the right side showing either **"Live Market Data"** or **"Demo Dataset"** depending on the `data_source` field returned from `GET /api/v1/scans/:scanId`.
 
 ---
 
-## Component 1: Stepper Bar
-
-**Purpose:** Persistent "you are here" indicator that appears at the top of every scan result page. Also tells the user if they're viewing live or demo data.
-
-**Appears on:** All 4 result screens (Failures, Grid, Territory, Propositions).
-
-**Data it needs:**
-- `scanId` (from route params) — used to fetch the scan's `data_source` field.
-- Current route path — to determine the active step.
-
-**What to render:**
-1. A horizontal list of 4 named steps, numbered 1–4:
-   - `1. Failures` → `/scan/:scanId/failures`
-   - `2. Whitespace Grid` → `/scan/:scanId/grid`
-   - `3. Authentic Territory` → `/scan/:scanId/territory`
-   - `4. Propositions` → `/scan/:scanId/propositions`
-2. The active step should be visually distinct (bolder, accent color, highlighted background).
-3. Past steps should be clickable links (so users can navigate backwards freely).
-4. A **data source badge** floated to the right:
-   - If `scan.data_source === 'live'`: Show a green badge labeled "Live Market Data".
-   - Else: Show an orange badge labeled "Demo Dataset".
-
----
-
-## Screen 1: Input Form (Home)
+## Screen 1: Input Form
 **Route:** `/`
 
-**Layout:** Two-column grid on desktop (form panel 2/3 width, recent scans sidebar 1/3 width).
+**API calls on load:**
+- `GET /api/v1/reference/categories` — populates the Category dropdown
+- `GET /api/v1/reference/personas` — populates the Target Persona dropdown
+- `GET /api/v1/scans` — populates the Recent Scans list
 
-### Panel A: New Idea Scan Form
+---
 
-**Header area:**
-- Title: "New Idea Scan"
-- Subtitle: "Define your product concept to analyze competitive white space."
-- Top-right: Two "Load Example" buttons ("Example 1", "Example 2") with a flask/beaker icon. These pre-fill the entire form with demo data for presentation purposes.
+### Form: New Idea Scan
 
-**Form fields (render in this order):**
+**Buttons at the top of the form:**
+- **"Example 1"** button — fills the entire form with preset demo data (Premium Snack Foods scenario).
+- **"Example 2"** button — fills the entire form with preset demo data (Ultra-Premium Energy Drink scenario).
 
-| Field | Type | Notes |
-|-------|------|-------|
-| Product Name | Text input | Required. Placeholder: "e.g. MegaWhey Pro" |
-| Category | Dropdown | Populated dynamically from `GET /api/v1/reference/categories`. Displays `display_name`, submits `category_code`. |
-| Target Persona | Dropdown | Populated dynamically from `GET /api/v1/reference/personas`. Displays `display_name`, submits `persona_code`. |
-| Primary Benefit Idea | Textarea (3 rows) | Required. Max 200 chars. Placeholder: "A high protein bar for serious athletes". Show a live character count or helper text. |
-| Key Ingredient | Text input | Optional. Placeholder: "e.g. Ashwagandha". |
-| Target Price Tier | Dropdown | Static options: `mass`, `mid`, `premium`, `ultra_premium`. Display as "Mass", "Mid", "Premium", "Ultra-Premium". |
-| Use Live Data | Checkbox | Disabled unless `category_code === 'protein_bars'`. Label: "Use live market data (protein bars only, experimental)". Helper text: "Fetches real current listings instead of the demo dataset." |
+**Form Fields:**
 
-**Submit button:** "Run Analysis" — right-aligned, primary CTA.
+| Field Name | Input Type | Required | Notes |
+|---|---|---|---|
+| Product Name | Text input | Yes | — |
+| Category | Dropdown | Yes | Options loaded from API. Submits `category_code`. |
+| Target Persona | Dropdown | Yes | Options loaded from API. Submits `persona_code`. |
+| Primary Benefit Idea | Textarea | Yes | Max 200 characters. |
+| Key Ingredient | Text input | No | — |
+| Target Price Tier | Dropdown | Yes | Static options: Mass, Mid, Premium, Ultra-Premium |
+| Use Live Data | Checkbox | No | Disabled unless Category = "Protein Bars". |
 
-**Loading state (after submit):**
-When the form is submitted, replace the form with a full-panel loading state. The scan takes 30–90 seconds. The UI polls the backend every 1.5s and shows a live progress bar + status message:
-- `pending` → "Initializing scan..." (10% bar)
-- `extracting_claims` → "Scanning competitive landscape..." (30% bar)
-- `scoring_claims` → "Computing market & consumer scores..." (50% bar)
-- `matching_failures` → "Matching against failure patterns..." (70% bar)
-- `generating_vps` → "Generating recommendations..." (90% bar)
-- `complete` → "Scan complete! Redirecting..." (100% bar, then auto-navigate to `/failures`)
+**Submit button:** "Run Analysis"
 
-### Panel B: Recent Scans Sidebar
+---
 
-**Data:** `GET /api/v1/scans` — returns an array of previous scan objects.
+### Form: Loading / Processing State
 
-Each scan item shows:
-- `product_name` (bold)
-- `category_code` • `target_price_tier` (secondary, smaller)
-- `status` — colored green if `complete`, gray otherwise.
+After the form is submitted, the form is replaced by a loading state. The backend processes the scan asynchronously and the frontend polls `GET /api/v1/scans/:scanId` every 1.5 seconds.
 
-Each item is a clickable link to `/scan/:id/failures`. Empty state: "No recent scans found."
+**Status messages to display (mapped from the scan's `status` field):**
+
+| `status` value | Message to show | Progress |
+|---|---|---|
+| `pending` | "Initializing scan..." | 10% |
+| `extracting_claims` | "Scanning competitive landscape..." | 30% |
+| `scoring_claims` | "Computing market & consumer scores..." | 50% |
+| `matching_failures` | "Matching against failure patterns..." | 70% |
+| `generating_vps` | "Generating recommendations..." | 90% |
+| `complete` | "Scan complete! Redirecting..." | 100% |
+
+When `status === 'complete'`, the user is automatically redirected to `/scan/:scanId/failures`.
+
+If `status` starts with `'failed'`, show an error message and reset the form.
+
+---
+
+### Sidebar: Recent Scans
+
+A list of previous scans loaded from `GET /api/v1/scans`.
+
+Each item shows:
+- `product_name`
+- `category_code` and `target_price_tier`
+- `status`
+
+Each item is a clickable link to `/scan/:id/failures`.
+
+Empty state: "No recent scans found."
 
 ---
 
 ## Screen 2: Failure Dashboard
 **Route:** `/scan/:scanId/failures`
 
-**Data source:** `GET /api/v1/scans/:scanId/failure-risks`
+**API call:** `GET /api/v1/scans/:scanId/failure-risks`
 
-Returns an array of `FailureMatch` objects. Each has:
-- `id`
-- `similarity_score` (number, 0–100)
-- `failure_case` (nested object):
-  - `product_name` (string)
-  - `failure_reason_type` (snake_case string, e.g., `"permission_gap"`)
-  - `positioning_used` (string)
-  - `failure_summary` (string)
-  - `lesson_learned` (string)
+Returns an array of failure match objects.
 
-**Layout:**
-- Page header: Shield/warning icon + "Historical Failure Risks" heading.
-- Subtitle: "Before exploring white space, review past market failures that share similar positioning and claims to your concept."
-- A vertical list of failure cards (see below).
-- A sticky/fixed acknowledgement footer bar at the bottom.
-
-**Failure Card design:**
-Each card should feel like a serious warning document, not a generic list item. Design notes:
-- Red left border stripe (4px).
-- Very subtle red gradient wash on the left side of the card.
-- Header row: `failure_case.product_name` in red/danger color, floated right: a "XX% pattern match" badge in red.
-- Below: A category tag showing `failure_reason_type` formatted as human-readable (replace underscores with spaces, uppercase).
-- Two labelled paragraphs: **"Positioning Used:"** `failure_case.positioning_used` and **"Summary:"** `failure_case.failure_summary`.
-- A "Lesson Learned" callout block with a left border and italic text.
-
-**Empty state:** A centered panel: "No strong historical failure patterns detected for this concept."
-
-**Acknowledgement Footer Bar:**
-This is a critical UX pattern — the user **must** check a checkbox before they can proceed. This is intentional design (the "Crash First" philosophy).
-- Checkbox + label: "I understand these market risks and want to see my opportunities."
-- "Continue to Whitespace Map →" primary CTA button — **disabled until checkbox is checked**.
+**Purpose of this screen:** Before showing any opportunities, the user must review historical product failures that have similar positioning to their concept. The user must explicitly acknowledge these risks before proceeding. This is an intentional gate.
 
 ---
 
-## Screen 3: Whitespace Opportunities Map (The Grid)
+### Failure Cards (one per returned item)
+
+Each item in the response has:
+- `similarity_score` — how closely it matches the user's concept (0–100)
+- `failure_case.product_name` — name of the failed product
+- `failure_case.failure_reason_type` — category of why it failed (e.g., `permission_gap`, `market_saturation`)
+- `failure_case.positioning_used` — what claim/positioning it tried
+- `failure_case.failure_summary` — brief explanation of what happened
+- `failure_case.lesson_learned` — the key takeaway
+
+Each card displays all of the above fields. The `similarity_score` is displayed as a percentage ("XX% pattern match").
+
+Empty state: "No strong historical failure patterns detected for this concept."
+
+---
+
+### Acknowledgement Bar
+
+A bar/section that contains:
+- A **checkbox** with label: "I understand these market risks and want to see my opportunities."
+- A **"Continue to Whitespace Map"** button — **this button is disabled until the checkbox is checked.**
+
+---
+
+## Screen 3: Whitespace Opportunities Map
 **Route:** `/scan/:scanId/grid`
 
-**Data source:** `GET /api/v1/scans/:scanId/whitespace`
+**API call:** `GET /api/v1/scans/:scanId/whitespace`
 
-Returns: `{ grid: [...ClaimScore objects] }`. Each `ClaimScore` has:
-- `need_category` (one of: "Energy", "Recovery", "Immunity", "Taste", "Convenience", "Sustainability")
-- `coverage_bucket` (one of: "Underserved", "Moderate", "Saturated")
-- `whitespace_classification` (one of: `true_whitespace`, `conditional`, `brand_whitespace`, `contested`, `consumer_whitespace`)
-- `bps_score` (number, 0–100) — Brand Permission Score
-- `fos_score` (number, 0–100) — Final Opportunity Score
-- `claim_code` (string)
-- `trend_direction` (one of: `rising`, `peaking`, `declining`)
-- `trend_velocity_score` (number)
+Returns: `{ grid: [...] }` — an array of scored claims.
 
-**This screen is the product's most data-dense view.** The core is a **6×3 matrix grid**:
-- **Rows (Y-axis):** 6 Need Categories: Energy, Recovery, Immunity, Taste, Convenience, Sustainability.
-- **Columns (X-axis):** 3 Coverage Buckets: Underserved, Moderate, Saturated.
-
-**Grid cell rendering logic (critical):**
-1. Group all `ClaimScore` objects by their `need_category` + `coverage_bucket` to find which claims fall in each cell.
-2. **Cell background color:** The dominant `whitespace_classification` among that cell's claims determines the color (use the 5-color semantic system defined above). Empty cells have a dashed border, no fill.
-3. **Cell opacity:** Map the average `bps_score` of that cell's claims to an opacity value between `0.3` and `1.0`. Higher Brand Permission = more opaque/vibrant. This visually encodes "your brand's credibility to win this space."
-4. **Cell content:** Display the count of claims in that cell as a number in white text. Empty cells show nothing.
-5. **On hover:** Scale up slightly (`scale(1.02)`) with a smooth transition.
-6. **On click:** Expand a panel below the grid showing the individual claims inside that cell (see Expanded Cell Panel).
-
-**Grid Legend:**
-A horizontal row of 5 color swatches with labels must appear above the grid: True Whitespace (green), Conditional (yellow), Brand Whitespace (orange), Contested (red), Empty (dashed).
-
-**Expanded Cell Panel (appears when a cell is clicked):**
-- Slides in below the grid.
-- Title: "{Category} Claims in {Bucket} Market" with an X close button.
-- A responsive card grid of individual claim mini-cards. Each mini-card shows:
-  - Claim name (formatted, capitalize, replace underscores with spaces).
-  - Trend icon: TrendingUp (green) if rising, TrendingDown (red) if declining, Minus (yellow) if peaking.
-  - "Final Opportunity Score:" → `fos_score`
-  - "Brand Permission:" → `bps_score`
-  - A classification badge in the appropriate color.
-
-**Footer CTA:** "Continue to Value Propositions →" right-aligned.
-
-> **Note:** The grid currently skips the "Authentic Territory" page in its CTA. It should navigate to `/scan/:scanId/territory`.
+**Purpose:** Shows a matrix of where market opportunities exist across need categories and market saturation levels.
 
 ---
 
-## Screen 4: Authentic Claim Territory (Radar Chart)
+### The Matrix Grid
+
+A **6 × 3 grid** where:
+- **Rows** = 6 Need Categories: Energy, Recovery, Immunity, Taste, Convenience, Sustainability
+- **Columns** = 3 Coverage Buckets: Underserved, Moderate, Saturated
+
+Each cell represents claims that fall in that category × bucket combination.
+
+**Each cell displays:**
+- The **count** of claims in that cell.
+- A **color** indicating the dominant opportunity classification among that cell's claims:
+  - `true_whitespace` — confirmed open opportunity
+  - `conditional` — opportunity with conditions/risks
+  - `brand_whitespace` — market open but brand credibility may be low
+  - `contested` — saturated, avoid
+  - `consumer_whitespace` — consumer interest but low market presence
+- **Opacity** of the cell is proportional to the average Brand Permission Score (BPS) of claims in that cell. Higher BPS = more opaque. This visually encodes how credible the brand is in that space.
+- Empty cells (no claims) are shown as empty/placeholder.
+
+**Interactions:**
+- **Clicking a cell** opens an expanded detail panel showing the individual claims in that cell.
+- **Hovering a cell** gives a visual feedback (scale or highlight).
+
+**Legend:** A key mapping each of the 5 classification types to their colors.
+
+---
+
+### Expanded Cell Panel (opens on cell click)
+
+Shows when the user clicks a cell. Has a **close/dismiss button**.
+
+Title: "{Category} Claims in {Bucket} Market"
+
+A list/grid of mini-cards, one per claim in that cell. Each mini-card shows:
+- Claim name (`claim_code` formatted as human-readable text)
+- Trend indicator icon: rising / peaking / declining
+- Final Opportunity Score (`fos_score`)
+- Brand Permission Score (`bps_score`)
+- Classification label (`whitespace_classification`)
+
+---
+
+### Navigation
+
+**"Continue to Authentic Territory"** button → navigates to `/scan/:scanId/territory`
+
+---
+
+## Screen 4: Authentic Claim Territory
 **Route:** `/scan/:scanId/territory`
 
-**Data source:** `GET /api/v1/scans/:scanId/authentic-territory`
+**API call:** `GET /api/v1/scans/:scanId/authentic-territory`
 
-Returns an array of claim objects, each with:
-- `claim_code` (string)
-- `market_openness` (number, 0–100)
-- `crs_score` (number, 0–100) — Consumer Response Score
-- `bps_score` (number, 0–100) — Brand Permission Score
-- `is_authentic_territory` (boolean) — `true` if this claim passes all 3 threshold tests.
+Returns an array of claims, each with scores across 3 dimensions.
 
-**Layout:** Two-column grid (radar chart on the left ~60%, description panel on the right ~40%).
+**Purpose:** Shows which claims satisfy all 3 scoring dimensions simultaneously — these are the claims the brand can both find and credibly win.
 
-### Left: Radar Chart
-- A **3-axis radar chart** with axes labeled: "Market Openness", "Consumer Response", "Brand Permission".
-- All axes scale from 0–100.
-- **One radar polygon per claim.** Each claim is plotted with its 3 dimension scores as the 3 axis values.
-- Claims where `is_authentic_territory === true`: bright teal stroke (`#0d9488`), semi-transparent teal fill (opacity 0.5), bold stroke.
-- Claims where `is_authentic_territory === false`: muted gray stroke, near-invisible fill (opacity 0.05).
-- Tooltip on hover showing the claim's dimension scores.
+---
 
-**This chart is the product's conceptual centrepiece.** The visual goal is to show that "authentic territory" claims light up in the center of the radar while non-qualifying claims barely register.
+### Radar Chart
 
-### Right: Description Panels (stacked vertically)
+A **3-axis radar chart** (spider/web chart) with axes:
+- Market Openness (0–100)
+- Consumer Response (0–100)
+- Brand Permission (0–100)
 
-**Panel 1: "What is this?"**
-Static explainer text: "Authentic Claim Territory is where all three dimensions align — the market has room, consumers want it, and your brand can credibly claim it. Claims highlighted here are the ONLY claims your brand can both find AND win."
+**One polygon per claim** is plotted. Claims where `is_authentic_territory === true` are visually prominent; claims where `is_authentic_territory === false` are visually subdued/faded.
 
-**Panel 2: "Qualifying Claims (N)"**
+Tooltip on hover shows the claim's name and its 3 axis scores.
+
+---
+
+### Description Panel (alongside the chart)
+
+**Section 1: Explainer**
+Static text: "Authentic Claim Territory is where all three dimensions align — the market has room, consumers want it, and your brand can credibly claim it. Claims highlighted here are the ONLY claims your brand can both find AND win."
+
+**Section 2: Qualifying Claims List**
 - Count of claims where `is_authentic_territory === true`.
-- A bulleted list of their `claim_code` values (formatted: replace underscores with spaces, capitalize).
+- A list of those claim names (formatted as readable text).
 - Empty state: "No claims hit the threshold for true whitespace across all three dimensions."
 
-**Footer CTA:** "Continue to Value Propositions →" right-aligned.
+---
+
+### Navigation
+
+**"Continue to Value Propositions"** button → navigates to `/scan/:scanId/propositions`
 
 ---
 
 ## Screen 5: AI Value Proposition Cards
 **Route:** `/scan/:scanId/propositions`
 
-**Data sources:**
-- VP Cards: `GET /api/v1/scans/:scanId/value-propositions`
-- Misalignment Flags: `GET /api/v1/scans/:scanId/misalignment-flags`
+**API calls:**
+- `GET /api/v1/scans/:scanId/value-propositions` — the recommended positioning options
+- `GET /api/v1/scans/:scanId/misalignment-flags` — claims the brand should avoid
 
-### VP Card data shape:
-Each VP has these fields:
-- `id`, `rank` (1 = top recommendation)
-- `headline` (string) — the main positioning line
-- `subclaim_1`, `subclaim_2` (strings) — supporting bullet points
-- `whitespace_classification` (string)
-- `fos_score` (number, 0–100)
-- `tier_cds_score` (number) — Claim Density Score
-- `cds_zone` (string: `green`, `yellow`, `red`)
-- `crs_score` (number, 0–100) — Consumer Response Score
-- `crs_believability` (number, 0–100)
-- `crs_relevance` (number, 0–100)
-- `crs_fatigue_inverse` (number, 0–100)
-- `crs_trigger_alignment` (number, 0–100)
-- `bps_score` (number, 0–100) — Brand Permission Score
-- `hero_ingredients` (array of strings)
-- `ingredient_rationale` (string)
-- `recommended_format` (string)
-- `packaging_direction` (string)
-- `price_band_min`, `price_band_max` (numbers, in ₹)
-- `trend_direction` (string: `rising`, `peaking`, `declining`)
-- `trend_velocity_score` (number)
-- `first_mover_window` (string — e.g., "12–18 months")
-- `channel_fit` (array of strings — e.g., ["D2C", "Modern Trade"])
+---
 
-### Page Header:
+### Page Header
+
 - Title: "Product Value Propositions"
-- Right side: "⬇ Download Brand Brief" button — triggers `POST /api/v1/scans/:scanId/brief`, then redirects to the PDF download URL.
-
-### Misalignment Flags Accordion (above the VP cards):
-A collapsible/accordion panel with a red/danger header showing "⚠️ Claims to Avoid (N)" where N is the count of flags. Clicking the header expands it.
-
-Each flag shows:
-- The `flagged_claim_code` in quotes and bold.
-- A badge showing `flag_reason`.
-- Explanation text.
-- If `suggested_replacement_code` exists: "↳ Suggestion: Try '{code}' instead" in teal.
-
-### VP Card Grid:
-Cards in a responsive grid (`repeat(auto-fit, minmax(300px, 1fr))`). 
-
-**Card anatomy (top to bottom):**
-1. **Card Header (colored background):**
-   - For `rank === 1`: Dark navy background, white text. This is the "hero" card.
-   - For others: Light/neutral background.
-   - Top row: Left = "Option N" badge in the classification color. Right = "FOS: XX.X" label.
-   - Main headline in large text: `"{vp.headline}"` (with quotes).
-   - Two bullet points: `subclaim_1`, `subclaim_2`.
-
-2. **Card Body (white/neutral background):**
-
-   **Section A: FOS Math Breakdown (collapsible `<details>`/`<summary>`):**
-   This is a key transparency feature. The summary toggle is: "🔍 See FOS Math Breakdown". When expanded, it shows the weighted calculation for this specific card's scores:
-   ```
-   FOS = Market (35%) + Consumer (40%) + Brand (25%)
-   ────────────────────────────────────────────────
-   Market Openness (100 - {tier_cds_score}) × 0.35  =  XX.X
-   Consumer Response (CRS {crs_score}) × 0.40       =  XX.X  
-   Brand Permission (BPS {bps_score}) × 0.25        =  XX.X
-   ════════════════════════════════════════════════
-   = Final Opportunity Score (FOS)                     XX.X / 100
-   ```
-
-   **Section B: Score Badges:**
-   - `Tier-CDS`: Show score + zone pill (`green`/`yellow`/`red` colored).
-   - `BPS Indicator`: Numeric score.
-   - `CRS Sub-filters (XX.X)`: A 2×2 grid of 4 mini progress bars, each showing:
-     - Believability: `crs_believability` / 100 (progress bar)
-     - Relevance: `crs_relevance` / 100 (progress bar)
-     - Fatigue Inv: `crs_fatigue_inverse` / 100 (progress bar)
-     - Intent: `crs_trigger_alignment` / 100 (progress bar)
-
-   **Section C: Hero Ingredients:**
-   - Tags/chips for each ingredient in `hero_ingredients`.
-   - `ingredient_rationale` text below.
-
-   **Section D: Format & Packaging:**
-   - `recommended_format` (formatted: replace underscores with spaces).
-   - `packaging_direction` description.
-
-   **Section E: Price Band & Trend Window (2-column):**
-   - Left: "Price Band" label + "₹{min} - ₹{max}" in large teal text.
-   - Right: "Trend Window" + trend icon (TrendingUp green / TrendingDown red / Minus yellow) + `first_mover_window` text.
-
-   **Section F: Channel Fit:**
-   - Outlined pill tags for each channel in `channel_fit`.
+- **"Download Brand Brief" button** — calls `POST /api/v1/scans/:scanId/brief`. While generating, show a loading state on the button ("Generating..."). On success, redirect the browser to the PDF download URL.
 
 ---
 
-## API Reference Summary
+### Misalignment Flags Section (collapsible/accordion)
 
-All calls prefix with `VITE_API_URL` (env var, defaults to `http://localhost:8000/api/v1`).
+Header label: "⚠️ Claims to Avoid (N)" where N is the count of flags.
 
-| Method | Endpoint | Used In |
-|--------|----------|---------|
-| GET | `/reference/categories` | Input Form (populate dropdown) |
-| GET | `/reference/personas` | Input Form (populate dropdown) |
-| GET | `/scans` | Input Form (recent scans sidebar) |
-| POST | `/scans` | Input Form (submit) |
-| GET | `/scans/:id` | Stepper (data source badge) + Form polling |
-| GET | `/scans/:id/failure-risks` | Failure Dashboard |
-| GET | `/scans/:id/whitespace` | Whitespace Grid |
-| GET | `/scans/:id/authentic-territory` | Authentic Territory |
-| GET | `/scans/:id/value-propositions` | VP Cards |
-| GET | `/scans/:id/misalignment-flags` | VP Cards (flags accordion) |
-| POST | `/scans/:id/brief` | VP Cards (PDF download) |
+**Clicking the header toggles it open/closed.**
+
+When expanded, each flag shows:
+- `flagged_claim_code` — the claim name (in quotes)
+- `flag_reason` — why it should be avoided (shown as a badge/tag)
+- `explanation` — paragraph explaining the issue
+- `suggested_replacement_code` — if present, show: "↳ Suggestion: Try '{code}' instead"
+
+Empty state inside the expanded panel: "No critical misalignments detected."
 
 ---
 
-## Error States
+### Value Proposition Cards (grid)
 
-Every result screen (`/failures`, `/grid`, `/territory`, `/propositions`) must handle a failed data fetch. The error UI should show:
-- A heading: "We couldn't load this scan."
-- Reason: "The scan may not exist, or it hasn't finished processing yet."
-- Two buttons: "Retry" (reload) and "Start Over" (navigate to `/`).
+A responsive card grid — as many cards as the API returns (typically 3–5). Each card is ranked with `rank` (1 = top recommendation).
+
+**Each card contains the following sections:**
+
+#### Header Area
+- **Rank label:** "Option 1", "Option 2", etc. (uses classification color as badge background)
+- **FOS score:** "FOS: XX.X" (Final Opportunity Score, displayed prominently)
+- **Headline:** `vp.headline` — the main positioning statement (in quotes)
+- **Two supporting bullet points:** `subclaim_1` and `subclaim_2`
+
+#### FOS Math Breakdown (collapsible)
+A toggle/expand section labeled **"See FOS Math Breakdown"**.
+
+When expanded, shows the weighted calculation with this card's actual numbers:
+```
+FOS = Market (35%) + Consumer (40%) + Brand (25%)
+
+Market Openness  (100 − {tier_cds_score}) × 0.35  =  XX.X
+Consumer Response (CRS {crs_score}) × 0.40         =  XX.X
+Brand Permission  (BPS {bps_score}) × 0.25         =  XX.X
+                                                    ───────
+Final Opportunity Score (FOS)                       XX.X / 100
+```
+
+#### Score Details
+- **Tier-CDS:** The claim density score value + zone label (`green` / `yellow` / `red`)
+- **BPS:** Brand Permission Score value
+- **CRS Sub-scores** — 4 individual scores shown as labelled progress bars (0–100):
+  - Believability
+  - Relevance
+  - Fatigue Inverse
+  - Intent Trigger Alignment
+
+#### Hero Ingredients
+- Tags for each ingredient in `hero_ingredients`
+- `ingredient_rationale` — a paragraph explaining the ingredient recommendation
+
+#### Format & Packaging
+- `recommended_format` — the suggested product format
+- `packaging_direction` — packaging/form factor guidance
+
+#### Price Band & Trend Window
+- **Price Band:** "₹{price_band_min} – ₹{price_band_max}"
+- **Trend Window:** Trend direction indicator (rising / peaking / declining) + `first_mover_window` text (e.g., "12–18 months")
+
+#### Channel Fit
+- A list of tags/pills for each channel in `channel_fit` (e.g., "D2C", "Modern Trade", "Quick Commerce")
 
 ---
 
-## Notes for the UI Team
+## Error States (all result screens)
 
-1. **The Stepper should allow free backwards navigation** — users may want to revisit the Failure Dashboard after seeing the VP cards.
-2. **The Whitespace Grid is intentionally not navigating to the Authentic Territory screen** in the current prototype. That should be fixed so the "Continue" CTA goes to `/territory`, not `/propositions`.
-3. **All scores are on a 0–100 scale.** Display them with 1 decimal place (e.g., `62.4`).
-4. **`claim_code` is always in `snake_case`.** Always display it formatted: replace `_` with spaces and capitalize for humans.
-5. **The PDF download button** (`POST /scans/:id/brief`) is slow (~5s). Show a loading state while it generates. When the response comes back with `{ status: 'ready', download_url: '/path/to/file.pdf' }`, redirect `window.location.href` to `VITE_BACKEND_URL + download_url`.
+If the API call for any result screen fails, show:
+- Heading: "We couldn't load this scan."
+- Sub-text: "The scan may not exist, or it hasn't finished processing yet."
+- **"Retry"** button — reloads the page
+- **"Start Over"** button — navigates to `/`
+
+---
+
+## Full API Reference
+
+Base URL is set via environment variable `VITE_API_URL` (defaults to `http://localhost:8000/api/v1`).
+
+| Method | Endpoint | Screen | Purpose |
+|--------|----------|--------|---------|
+| GET | `/reference/categories` | Input Form | Populate category dropdown |
+| GET | `/reference/personas` | Input Form | Populate persona dropdown |
+| GET | `/scans` | Input Form | Recent scans sidebar |
+| POST | `/scans` | Input Form | Submit new scan |
+| GET | `/scans/:id` | Stepper + Form | Poll scan status / data source badge |
+| GET | `/scans/:id/failure-risks` | Failure Dashboard | Load failure cards |
+| GET | `/scans/:id/whitespace` | Whitespace Grid | Load matrix data |
+| GET | `/scans/:id/authentic-territory` | Authentic Territory | Load radar chart data |
+| GET | `/scans/:id/value-propositions` | VP Cards | Load VP cards |
+| GET | `/scans/:id/misalignment-flags` | VP Cards | Load flags accordion |
+| POST | `/scans/:id/brief` | VP Cards | Generate + download PDF |
+
+**PDF download:** The `POST /scans/:id/brief` response returns `{ status: 'ready', download_url: '/path/to/file.pdf' }`. Redirect `window.location.href` to `VITE_BACKEND_URL + download_url` (separate env var, defaults to `http://localhost:8000`).
+
+---
+
+## Notes
+
+- All `claim_code` and `failure_reason_type` values are in `snake_case` from the API. Always display them as readable text (replace underscores with spaces, capitalize).
+- All scores are 0–100. Display with 1 decimal place (e.g., `62.4`).
+- The user can freely navigate between steps 1–4 using the Stepper links at any time.
+- The checkbox acknowledgement on the Failure Dashboard is intentional — the Continue button must stay disabled until checked.
