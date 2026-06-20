@@ -2,6 +2,39 @@ import random
 from db import SessionLocal
 from models.models import Persona, ProductCategory, Claim, CompetitorProduct
 
+NEED_CATEGORY_MAP = {
+    "high_protein": "Recovery",
+    "no_sugar": "Convenience",  # Generic health mapped to convenience
+    "high_fibre": "Recovery",
+    "immunity_boosting": "Immunity",
+    "confidence": "Energy",
+    "empowerment": "Energy",
+    "calm": "Recovery",
+    "community": "Sustainability",
+    "on_the_go": "Convenience",
+    "single_serve": "Convenience",
+    "ready_to_mix": "Convenience",
+    "collagen": "Recovery",
+    "ashwagandha": "Recovery",
+    "turmeric": "Immunity",
+    "whey_protein": "Recovery",
+    "plant_protein": "Sustainability",
+    "fitness": "Energy",
+    "wellness": "Immunity",
+    "sustainable": "Sustainability",
+    "vegan": "Sustainability",
+    "recovery_focused": "Recovery",
+    "science_backed": "Energy",
+    "performance": "Energy",
+    "trusted_brand": "Sustainability",
+    "fortified": "Immunity",
+    "wholesome": "Recovery",
+    "natural": "Taste",
+    "clinically_tested": "Energy",
+    "doctor_recommended": "Immunity",
+    "gut_health": "Recovery"
+}
+
 def seed_database():
     db = SessionLocal()
     try:

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { AlertTriangle, ShieldAlert, ArrowRight } from 'lucide-react';
 import client from '../api/client';
+import Stepper from '../components/Stepper';
 
 export default function FailureDashboard() {
   const { scanId } = useParams();
@@ -30,6 +31,8 @@ export default function FailureDashboard() {
 
   return (
     <div className="container">
+      <Stepper scanId={scanId} />
+      
       <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
         <ShieldAlert size={32} color="var(--danger-color)" />
         <h2 style={{ margin: 0 }}>Historical Failure Risks</h2>
