@@ -32,16 +32,22 @@ async def global_exception_handler(request: Request, exc: Exception):
         content={"error": "Internal Server Error", "detail": str(exc)}
     )
 
-origins = [
-    "http://localhost:5173",
-    # NOTE: CORS is currently scoped to Vite's local dev server. 
-    # Must be updated with production domains before deployment.
-]
+import os
+frontend_url = os.getenv("FRONTEND_URL", "*")
+if frontend_url == "*":
+    origins = ["*"]
+    allow_credentials = False
+else:
+    origins = [
+        "http://localhost:5173",
+        frontend_url
+    ]
+    allow_credentials = True
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
-    allow_credentials=True,
+    allow_credentials=allow_credentials,
     allow_methods=["*"],
     allow_headers=["*"],
 )

@@ -73,7 +73,8 @@ function ValuePropositions() {
               setLoading(true);
               const res = await apiClient.post(`/scans/${scanId}/brief`);
               if (res.data.status === 'ready') {
-                window.location.href = `http://localhost:8000${res.data.download_url}`;
+              const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8000';
+              window.location.href = `${backendUrl}${res.data.download_url}`;
               }
             } catch (err) {
               alert('Failed to generate brand brief.');
