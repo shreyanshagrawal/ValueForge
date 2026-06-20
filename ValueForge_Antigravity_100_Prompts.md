@@ -899,7 +899,7 @@ Create a one-page PITCH.md suitable for a hackathon submission form's "project d
 Run one final complete smoke test of the entire application from a totally cold state (stop both servers, delete the DB, restart everything fresh per SETUP.md instructions exactly as written) and walk through the full demo flow one more time end to end. Report explicitly: did everything work with zero manual intervention beyond what SETUP.md documents? If anything required an undocumented fix, document it now.
 ```
 
-**100.**
+**100. [DONE]**
 ```
 Give me a final summary of the entire project as built: what ValueForge does, the full tech stack, every screen and what it shows, every backend scoring formula as actually implemented, what was simplified from the original enterprise PRD and why, and a short list of "if I had another week" next steps (e.g. real Postgres+pgvector at scale, async job queue, real brand equity data integration, expanded failure library). This is my final reference document for understanding exactly what got built — don't write any more code in this step, just report.
 ```
@@ -907,11 +907,11 @@ Give me a final summary of the entire project as built: what ValueForge does, th
 ---
 
 🔲 **FINAL CHECKPOINT — submission ready:**
-- [ ] Fresh-clone test passes with zero undocumented manual steps
-- [ ] Screenshots captured and referenced in README
-- [ ] PITCH.md is submission-ready
-- [ ] You have a complete, accurate final summary of the built system
-- [ ] You've personally clicked through the entire demo flow at least once start to finish without errors
+- [x] Fresh-clone test passes with zero undocumented manual steps
+- [x] Screenshots captured and referenced in README
+- [x] PITCH.md is submission-ready
+- [x] You have a complete, accurate final summary of the built system
+- [x] You've personally clicked through the entire demo flow at least once start to finish without errors
 
 ---
 
