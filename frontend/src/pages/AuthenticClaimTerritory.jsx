@@ -10,6 +10,7 @@ export default function AuthenticClaimTerritory() {
   const navigate = useNavigate();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     async function fetchData() {
@@ -18,6 +19,7 @@ export default function AuthenticClaimTerritory() {
         setData(res.data);
       } catch (err) {
         console.error("Error fetching territory data", err);
+        setError("The scan may not exist, or it hasn't finished processing yet.");
       } finally {
         setLoading(false);
       }
@@ -27,6 +29,19 @@ export default function AuthenticClaimTerritory() {
 
   if (loading) {
     return <div className="container" style={{ textAlign: 'center', marginTop: '100px' }}>Loading territory visualization...</div>;
+  }
+  
+  if (error) {
+    return (
+      <div className="container" style={{ textAlign: 'center', marginTop: '100px' }}>
+        <h2 style={{ color: 'var(--danger-color)' }}>We couldn't load this scan.</h2>
+        <p style={{ color: 'var(--text-secondary)', marginBottom: '24px' }}>{error}</p>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '16px' }}>
+          <button className="btn btn-outline" onClick={() => window.location.reload()}>Retry</button>
+          <button className="btn btn-primary" onClick={() => navigate('/')}>Start Over</button>
+        </div>
+      </div>
+    );
   }
   
   const axesData = [

@@ -4,6 +4,15 @@ from services.gemini_client import generate_text
 
 logger = logging.getLogger(__name__)
 
+def _fallback_keyword_extraction(benefit_idea_text: str, all_claims: list[str]) -> list[str]:
+    fallback_matches = set()
+    text_lower = benefit_idea_text.lower()
+    for claim in all_claims:
+        label = claim.replace("_", " ").lower()
+        if claim.lower() in text_lower or label in text_lower:
+            fallback_matches.add(claim)
+    return list(fallback_matches)
+
 def extract_claim_signals(benefit_idea_text: str, all_claims: list[str]) -> list[str]:
     """
     Takes a free-text benefit idea and a list of known claim_codes, and returns 
@@ -25,6 +34,10 @@ def extract_claim_signals(benefit_idea_text: str, all_claims: list[str]) -> list
     
     response_text = generate_text(prompt)
     
+    if response_text.startswith("Error:"):
+        logger.warning(f"Gemini API returned an error, falling back to keyword matching: {response_text}")
+        return _fallback_keyword_extraction(benefit_idea_text, all_claims)
+    
     # Defensively parse the response
     cleaned_response = response_text.strip()
     if cleaned_response.startswith("```json"):
@@ -45,13 +58,4 @@ def extract_claim_signals(benefit_idea_text: str, all_claims: list[str]) -> list
     except json.JSONDecodeError as e:
         logger.warning(f"Failed to parse Gemini response as JSON. Falling back to keyword matching. Error: {e}\nResponse was: {response_text}")
     
-    # Fallback to simple keyword/substring matching
-    fallback_matches = set()
-    text_lower = benefit_idea_text.lower()
-    for claim in all_claims:
-        # Check both the exact code and a clean display label approximation
-        label = claim.replace("_", " ").lower()
-        if claim.lower() in text_lower or label in text_lower:
-            fallback_matches.add(claim)
-            
-    return list(fallback_matches)
+    return _fallback_keyword_extraction(benefit_idea_text, all_claims)

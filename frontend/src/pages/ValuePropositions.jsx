@@ -36,8 +36,19 @@ function ValuePropositions() {
     fetchData();
   }, [scanId]);
 
-  if (loading) return <div className="loading-state">Generating Value Propositions...</div>;
-  if (error) return <div className="error-state">{error}</div>;
+  if (loading) return <div className="container" style={{ textAlign: 'center', marginTop: '100px' }}>Generating Value Propositions...</div>;
+  if (error) {
+    return (
+      <div className="container" style={{ textAlign: 'center', marginTop: '100px' }}>
+        <h2 style={{ color: 'var(--danger-color)' }}>We couldn't load this scan.</h2>
+        <p style={{ color: 'var(--text-secondary)', marginBottom: '24px' }}>{error}</p>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '16px' }}>
+          <button className="btn btn-outline" onClick={() => window.location.reload()}>Retry</button>
+          <button className="btn btn-primary" onClick={() => navigate('/')}>Start Over</button>
+        </div>
+      </div>
+    );
+  }
 
   const getClassColor = (cls) => {
     const mapping = {

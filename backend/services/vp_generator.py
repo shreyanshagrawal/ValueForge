@@ -49,8 +49,12 @@ def generate_value_propositions(db_session: Session, scan_session: ScanSession, 
         """
         
         gemini_response = generate_text(prompt)
+        
         # Parse JSON
         try:
+            if gemini_response.startswith("Error:"):
+                raise ValueError("Gemini API returned an error")
+                
             clean_json = gemini_response.strip()
             if clean_json.startswith("```json"):
                 clean_json = clean_json[7:]

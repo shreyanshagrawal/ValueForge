@@ -114,6 +114,7 @@ export default function InputForm() {
               <label>Primary Benefit Idea</label>
               <textarea 
                 required 
+                maxLength={200}
                 name="primary_benefit_idea" 
                 value={formData.primary_benefit_idea} 
                 onChange={handleChange} 
@@ -121,7 +122,7 @@ export default function InputForm() {
                 placeholder="A high protein bar for serious athletes"
               />
               <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '6px', marginBottom: 0 }}>
-                Describe your product idea in a sentence or two — we'll extract the claims.
+                Describe your product idea in a sentence or two — we'll extract the claims. (Max 200 chars)
               </p>
             </div>
             
@@ -160,7 +161,7 @@ export default function InputForm() {
             </div>
             
             <div style={{ marginTop: '16px', textAlign: 'right' }}>
-              <button type="submit" className="btn btn-primary" style={{ padding: '12px 32px' }}>
+              <button type="submit" className="btn btn-primary" style={{ padding: '12px 32px' }} disabled={isSubmitting}>
                 Run Analysis
               </button>
             </div>

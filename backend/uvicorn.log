@@ -178,3 +178,304 @@ INFO:     Application startup complete.
 All failure cases already have embeddings.
 INFO:     127.0.0.1:60117 - "GET /api/v1/scans/75326e71-282c-4357-bc60-82d009c689c1/value-propositions HTTP/1.1" 404 Not Found
 INFO:     127.0.0.1:60123 - "GET /api/v1/scans/6a5db474-559a-4670-956c-5b56ddbfe9e8/value-propositions HTTP/1.1" 200 OK
+WARNING:  StatReload detected changes in 'services/nlp_extractor.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [34778]
+/Users/shreyansh/Documents/Coding/hackathon/valueforge/backend/services/gemini_client.py:3: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+INFO:     Started server process [34946]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'services/nlp_extractor.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [34946]
+/Users/shreyansh/Documents/Coding/hackathon/valueforge/backend/services/gemini_client.py:3: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+INFO:     Started server process [34956]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'services/vp_generator.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [34956]
+/Users/shreyansh/Documents/Coding/hackathon/valueforge/backend/services/gemini_client.py:3: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+INFO:     Started server process [34966]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'main.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [34966]
+/Users/shreyansh/Documents/Coding/hackathon/valueforge/backend/services/gemini_client.py:3: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+INFO:     Started server process [34974]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'routers/scans.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [34974]
+/Users/shreyansh/Documents/Coding/hackathon/valueforge/backend/services/gemini_client.py:3: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+INFO:     Started server process [35025]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+All failure cases already have embeddings.
+INFO:     127.0.0.1:60224 - "GET /api/v1/scans/6a5db474-559a-4670-956c-5b56ddbfe9e8/failure-risks HTTP/1.1" 200 OK
+WARNING:  StatReload detected changes in 'routers/scans.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [35025]
+/Users/shreyansh/Documents/Coding/hackathon/valueforge/backend/services/gemini_client.py:3: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+INFO:     Started server process [35035]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+ERROR:root:Unhandled exception on /api/v1/scans/6a5db474-559a-4670-956c-5b56ddbfe9e8/failure-risks: Test error for global handler
+Traceback (most recent call last):
+  File "/Users/shreyansh/Documents/Coding/hackathon/valueforge/backend/venv/lib/python3.14/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/shreyansh/Documents/Coding/hackathon/valueforge/backend/venv/lib/python3.14/site-packages/starlette/middleware/cors.py", line 88, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/shreyansh/Documents/Coding/hackathon/valueforge/backend/venv/lib/python3.14/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/shreyansh/Documents/Coding/hackathon/valueforge/backend/venv/lib/python3.14/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/shreyansh/Documents/Coding/hackathon/valueforge/backend/venv/lib/python3.14/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/shreyansh/Documents/Coding/hackathon/valueforge/backend/venv/lib/python3.14/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/shreyansh/Documents/Coding/hackathon/valueforge/backend/venv/lib/python3.14/site-packages/starlette/routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/shreyansh/Documents/Coding/hackathon/valueforge/backend/venv/lib/python3.14/site-packages/fastapi/routing.py", line 2531, in app
+    await route.handle(scope, receive, send)
+  File "/Users/shreyansh/Documents/Coding/hackathon/valueforge/backend/venv/lib/python3.14/site-packages/fastapi/routing.py", line 1700, in handle
+    await self.original_router.handle(scope, receive, send)
+  File "/Users/shreyansh/Documents/Coding/hackathon/valueforge/backend/venv/lib/python3.14/site-packages/fastapi/routing.py", line 2586, in handle
+    await included_router._handle_selected(scope, receive, send)
+  File "/Users/shreyansh/Documents/Coding/hackathon/valueforge/backend/venv/lib/python3.14/site-packages/fastapi/routing.py", line 1720, in _handle_selected
+    await original_route.handle(scope, receive, send)
+  File "/Users/shreyansh/Documents/Coding/hackathon/valueforge/backend/venv/lib/python3.14/site-packages/fastapi/routing.py", line 1239, in handle
+    await app(scope, receive, send)
+  File "/Users/shreyansh/Documents/Coding/hackathon/valueforge/backend/venv/lib/python3.14/site-packages/fastapi/routing.py", line 150, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/shreyansh/Documents/Coding/hackathon/valueforge/backend/venv/lib/python3.14/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/shreyansh/Documents/Coding/hackathon/valueforge/backend/venv/lib/python3.14/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/shreyansh/Documents/Coding/hackathon/valueforge/backend/venv/lib/python3.14/site-packages/fastapi/routing.py", line 136, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/Users/shreyansh/Documents/Coding/hackathon/valueforge/backend/venv/lib/python3.14/site-packages/fastapi/routing.py", line 690, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/Users/shreyansh/Documents/Coding/hackathon/valueforge/backend/venv/lib/python3.14/site-packages/fastapi/routing.py", line 346, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/shreyansh/Documents/Coding/hackathon/valueforge/backend/venv/lib/python3.14/site-packages/starlette/concurrency.py", line 34, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/shreyansh/Documents/Coding/hackathon/valueforge/backend/venv/lib/python3.14/site-packages/anyio/to_thread.py", line 63, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/shreyansh/Documents/Coding/hackathon/valueforge/backend/venv/lib/python3.14/site-packages/anyio/_backends/_asyncio.py", line 2592, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "/Users/shreyansh/Documents/Coding/hackathon/valueforge/backend/venv/lib/python3.14/site-packages/anyio/_backends/_asyncio.py", line 1029, in run
+    result = context.run(func, *args)
+  File "/Users/shreyansh/Documents/Coding/hackathon/valueforge/backend/routers/scans.py", line 75, in get_scan_failure_risks
+    raise ValueError("Test error for global handler")
+ValueError: Test error for global handler
+All failure cases already have embeddings.
+INFO:     127.0.0.1:60231 - "GET /api/v1/scans/6a5db474-559a-4670-956c-5b56ddbfe9e8/failure-risks HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/shreyansh/Documents/Coding/hackathon/valueforge/backend/venv/lib/python3.14/site-packages/uvicorn/protocols/http/h11_impl.py", line 415, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.scope, self.receive, self.send
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/shreyansh/Documents/Coding/hackathon/valueforge/backend/venv/lib/python3.14/site-packages/uvicorn/middleware/proxy_headers.py", line 62, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/shreyansh/Documents/Coding/hackathon/valueforge/backend/venv/lib/python3.14/site-packages/fastapi/applications.py", line 1163, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/shreyansh/Documents/Coding/hackathon/valueforge/backend/venv/lib/python3.14/site-packages/starlette/applications.py", line 90, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/shreyansh/Documents/Coding/hackathon/valueforge/backend/venv/lib/python3.14/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/shreyansh/Documents/Coding/hackathon/valueforge/backend/venv/lib/python3.14/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/shreyansh/Documents/Coding/hackathon/valueforge/backend/venv/lib/python3.14/site-packages/starlette/middleware/cors.py", line 88, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/shreyansh/Documents/Coding/hackathon/valueforge/backend/venv/lib/python3.14/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/shreyansh/Documents/Coding/hackathon/valueforge/backend/venv/lib/python3.14/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/shreyansh/Documents/Coding/hackathon/valueforge/backend/venv/lib/python3.14/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/shreyansh/Documents/Coding/hackathon/valueforge/backend/venv/lib/python3.14/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/shreyansh/Documents/Coding/hackathon/valueforge/backend/venv/lib/python3.14/site-packages/starlette/routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/shreyansh/Documents/Coding/hackathon/valueforge/backend/venv/lib/python3.14/site-packages/fastapi/routing.py", line 2531, in app
+    await route.handle(scope, receive, send)
+  File "/Users/shreyansh/Documents/Coding/hackathon/valueforge/backend/venv/lib/python3.14/site-packages/fastapi/routing.py", line 1700, in handle
+    await self.original_router.handle(scope, receive, send)
+  File "/Users/shreyansh/Documents/Coding/hackathon/valueforge/backend/venv/lib/python3.14/site-packages/fastapi/routing.py", line 2586, in handle
+    await included_router._handle_selected(scope, receive, send)
+  File "/Users/shreyansh/Documents/Coding/hackathon/valueforge/backend/venv/lib/python3.14/site-packages/fastapi/routing.py", line 1720, in _handle_selected
+    await original_route.handle(scope, receive, send)
+  File "/Users/shreyansh/Documents/Coding/hackathon/valueforge/backend/venv/lib/python3.14/site-packages/fastapi/routing.py", line 1239, in handle
+    await app(scope, receive, send)
+  File "/Users/shreyansh/Documents/Coding/hackathon/valueforge/backend/venv/lib/python3.14/site-packages/fastapi/routing.py", line 150, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/shreyansh/Documents/Coding/hackathon/valueforge/backend/venv/lib/python3.14/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/shreyansh/Documents/Coding/hackathon/valueforge/backend/venv/lib/python3.14/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/shreyansh/Documents/Coding/hackathon/valueforge/backend/venv/lib/python3.14/site-packages/fastapi/routing.py", line 136, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/Users/shreyansh/Documents/Coding/hackathon/valueforge/backend/venv/lib/python3.14/site-packages/fastapi/routing.py", line 690, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/Users/shreyansh/Documents/Coding/hackathon/valueforge/backend/venv/lib/python3.14/site-packages/fastapi/routing.py", line 346, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/shreyansh/Documents/Coding/hackathon/valueforge/backend/venv/lib/python3.14/site-packages/starlette/concurrency.py", line 34, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/shreyansh/Documents/Coding/hackathon/valueforge/backend/venv/lib/python3.14/site-packages/anyio/to_thread.py", line 63, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/shreyansh/Documents/Coding/hackathon/valueforge/backend/venv/lib/python3.14/site-packages/anyio/_backends/_asyncio.py", line 2592, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "/Users/shreyansh/Documents/Coding/hackathon/valueforge/backend/venv/lib/python3.14/site-packages/anyio/_backends/_asyncio.py", line 1029, in run
+    result = context.run(func, *args)
+  File "/Users/shreyansh/Documents/Coding/hackathon/valueforge/backend/routers/scans.py", line 75, in get_scan_failure_risks
+    raise ValueError("Test error for global handler")
+ValueError: Test error for global handler
+WARNING:  StatReload detected changes in 'routers/scans.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [35035]
+/Users/shreyansh/Documents/Coding/hackathon/valueforge/backend/services/gemini_client.py:3: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+INFO:     Started server process [35046]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+ERROR:services.gemini_client:Error generating text from Gemini API: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash
+Please retry in 58.255451645s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-2.5-flash"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+  quota_value: 20
+}
+, retry_delay {
+  seconds: 58
+}
+]
+WARNING:services.nlp_extractor:Gemini API returned an error, falling back to keyword matching: Error: Unable to generate text at this time.
+All failure cases already have embeddings.
+Error in run_full_scan: Traceback (most recent call last):
+  File "/Users/shreyansh/Documents/Coding/hackathon/valueforge/backend/routers/scans.py", line 45, in create_scan
+    run_full_scan(db, scan_session)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/Users/shreyansh/Documents/Coding/hackathon/valueforge/backend/services/orchestrator.py", line 14, in run_full_scan
+    raise ValueError(f"Persona '{scan_session.persona_code}' not found.")
+ValueError: Persona 'unknown_persona' not found.
+
+INFO:     127.0.0.1:60242 - "POST /api/v1/scans HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60246 - "GET /api/v1/scans/6f180bc7-2f9c-4ccd-9c4f-9c2fd13658a5/failure-risks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60248 - "GET /api/v1/scans/6f180bc7-2f9c-4ccd-9c4f-9c2fd13658a5/authentic-territory HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60251 - "GET /api/v1/scans/6f180bc7-2f9c-4ccd-9c4f-9c2fd13658a5/value-propositions HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:60253 - "GET /api/v1/scans/6f180bc7-2f9c-4ccd-9c4f-9c2fd13658a5/whitespace HTTP/1.1" 200 OK
