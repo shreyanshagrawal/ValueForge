@@ -56,6 +56,18 @@ class ScanSession(Base):
     claim_scores = relationship("ClaimScore", back_populates="scan")
     misalignment_flags = relationship("MisalignmentFlag", back_populates="scan")
     value_propositions = relationship("ValueProposition", back_populates="scan")
+    failure_matches = relationship("FailureMatch", back_populates="scan")
+
+class FailureMatch(Base):
+    __tablename__ = "failure_matches"
+    id = Column(String, primary_key=True, default=generate_uuid)
+    scan_id = Column(String, ForeignKey("scan_sessions.id"))
+    failure_case_id = Column(String, ForeignKey("failure_cases.id"))
+    similarity_score = Column(Float)
+    rank = Column(Integer)
+
+    scan = relationship("ScanSession", back_populates="failure_matches")
+    failure_case = relationship("FailureCase")
 
 class MisalignmentFlag(Base):
     __tablename__ = "misalignment_flags"

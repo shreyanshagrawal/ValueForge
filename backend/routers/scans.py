@@ -2,8 +2,8 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from typing import List
 from db import get_db
-from models.models import ScanSession, ClaimScore, Claim, MisalignmentFlag
-from schemas.scan_schemas import ScanCreateRequest, ScanSessionResponse, ClaimScoreResponse, MisalignmentFlagResponse
+from models.models import ScanSession, ClaimScore, Claim, MisalignmentFlag, FailureMatch
+from schemas.scan_schemas import ScanCreateRequest, ScanSessionResponse, ClaimScoreResponse, MisalignmentFlagResponse, FailureMatchResponse
 from services.orchestrator import run_full_scan
 from services.nlp_extractor import extract_claim_signals
 import traceback
@@ -59,3 +59,8 @@ def get_scan_claims(scan_id: str, db: Session = Depends(get_db)):
 def get_scan_flags(scan_id: str, db: Session = Depends(get_db)):
     flags = db.query(MisalignmentFlag).filter(MisalignmentFlag.scan_id == scan_id).all()
     return flags
+
+@router.get("/{scan_id}/failure-risks", response_model=List[FailureMatchResponse])
+def get_scan_failure_risks(scan_id: str, db: Session = Depends(get_db)):
+    matches = db.query(FailureMatch).filter(FailureMatch.scan_id == scan_id).order_by(FailureMatch.rank.asc()).all()
+    return matches

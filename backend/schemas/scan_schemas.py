@@ -48,3 +48,25 @@ class ClaimScoreResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+class FailureCaseResponse(BaseModel):
+    id: str
+    product_name: str
+    category_code: str
+    positioning_used: str
+    claim_codes_used: List[str]
+    failure_reason_type: str
+    failure_summary: str
+    lesson_learned: str
+
+    class Config:
+        from_attributes = True
+
+class FailureMatchResponse(BaseModel):
+    id: str
+    similarity_score: float
+    rank: int
+    failure_case: FailureCaseResponse
+
+    class Config:
+        from_attributes = True

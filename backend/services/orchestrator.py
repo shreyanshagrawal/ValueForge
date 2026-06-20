@@ -1,9 +1,10 @@
 from sqlalchemy.orm import Session
-from models.models import ScanSession, Persona, CompetitorProduct, ClaimScore, MisalignmentFlag
+from models.models import ScanSession, Persona, CompetitorProduct, ClaimScore, MisalignmentFlag, FailureMatch
 from services.scoring_engine import compute_tier_cds, compute_crs, compute_fos_and_classification
 from services.intent_engine import compute_intent_adjusted_score
 from services.brand_permission import compute_bps
 from services.misalignment_engine import generate_misalignment_flags
+from services.failure_matcher import find_matching_failures
 
 def run_full_scan(db_session: Session, scan_session: ScanSession) -> list[dict]:
     # 1. Fetch persona
@@ -115,5 +116,17 @@ def run_full_scan(db_session: Session, scan_session: ScanSession) -> list[dict]:
             )
             db_session.add(mf)
         db_session.commit()
+        
+    # 7. Run Failure Matching
+    matched_failures = find_matching_failures(db_session, scan_session)
+    for idx, match in enumerate(matched_failures):
+        fm = FailureMatch(
+            scan_id=scan_session.id,
+            failure_case_id=match["failure_case"].id,
+            similarity_score=match["similarity_score"],
+            rank=idx + 1
+        )
+        db_session.add(fm)
+    db_session.commit()
         
     return results
