@@ -69,6 +69,8 @@ class FailureMatch(Base):
     scan = relationship("ScanSession", back_populates="failure_matches")
     failure_case = relationship("FailureCase")
 
+
+
 class MisalignmentFlag(Base):
     __tablename__ = "misalignment_flags"
     id = Column(String, primary_key=True, default=generate_uuid)
@@ -118,13 +120,19 @@ class ValueProposition(Base):
     id = Column(String, primary_key=True, default=generate_uuid)
     scan_id = Column(String, ForeignKey("scan_sessions.id"))
     rank = Column(Integer)
-    claim_code = Column(String)
     headline = Column(String)
+    subclaim_1 = Column(String)
+    subclaim_2 = Column(String)
+    fos_score = Column(Float)
+    bps_score = Column(Float)
+    whitespace_classification = Column(String)
     hero_ingredients = Column(JSON)
+    ingredient_rationale = Column(String)
     recommended_format = Column(String)
     packaging_direction = Column(String)
     price_band_min = Column(Float)
     price_band_max = Column(Float)
+    first_mover_window = Column(String)
     channel_fit = Column(JSON)
 
     scan = relationship("ScanSession", back_populates="value_propositions")

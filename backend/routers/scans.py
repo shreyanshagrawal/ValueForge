@@ -3,7 +3,14 @@ from sqlalchemy.orm import Session
 from typing import List
 from db import get_db
 from models.models import ScanSession, ClaimScore, Claim, MisalignmentFlag, FailureMatch
-from schemas.scan_schemas import ScanCreateRequest, ScanSessionResponse, ClaimScoreResponse, MisalignmentFlagResponse, FailureMatchResponse
+from schemas.scan_schemas import (
+    ScanCreateRequest, 
+    ScanSessionResponse, 
+    ClaimScoreResponse, 
+    MisalignmentFlagResponse, 
+    FailureMatchResponse,
+    ValuePropositionResponse
+)
 from services.orchestrator import run_full_scan
 from services.nlp_extractor import extract_claim_signals
 import traceback
@@ -64,3 +71,11 @@ def get_scan_flags(scan_id: str, db: Session = Depends(get_db)):
 def get_scan_failure_risks(scan_id: str, db: Session = Depends(get_db)):
     matches = db.query(FailureMatch).filter(FailureMatch.scan_id == scan_id).order_by(FailureMatch.rank.asc()).all()
     return matches
+
+@router.get("/{scan_id}/value-propositions", response_model=List[ValuePropositionResponse])
+def get_scan_vps(scan_id: str, db: Session = Depends(get_db)):
+    from models.models import ValueProposition
+    vps = db.query(ValueProposition).filter(ValueProposition.scan_id == scan_id).order_by(ValueProposition.rank.asc()).all()
+    if not vps:
+        raise HTTPException(status_code=404, detail="No value propositions found for this scan.")
+    return vps

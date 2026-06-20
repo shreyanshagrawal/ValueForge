@@ -70,3 +70,29 @@ class FailureMatchResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+class ScanResultResponse(BaseModel):
+    scan_session: ScanSessionResponse
+    claim_scores: List[ClaimScoreResponse]
+    misalignment_flags: List[MisalignmentFlagResponse]
+
+class ValuePropositionResponse(BaseModel):
+    id: str
+    rank: int
+    headline: str
+    subclaim_1: str
+    subclaim_2: str
+    fos_score: float
+    bps_score: float
+    whitespace_classification: str
+    hero_ingredients: List[str]
+    ingredient_rationale: str
+    recommended_format: str
+    packaging_direction: str
+    price_band_min: float
+    price_band_max: float
+    first_mover_window: str
+    channel_fit: List[str]
+
+    class Config:
+        from_attributes = True

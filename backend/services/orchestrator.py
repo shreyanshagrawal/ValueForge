@@ -5,6 +5,7 @@ from services.intent_engine import compute_intent_adjusted_score
 from services.brand_permission import compute_bps
 from services.misalignment_engine import generate_misalignment_flags
 from services.failure_matcher import find_matching_failures
+from services.vp_generator import generate_value_propositions
 
 def run_full_scan(db_session: Session, scan_session: ScanSession) -> list[dict]:
     # 1. Fetch persona
@@ -127,6 +128,13 @@ def run_full_scan(db_session: Session, scan_session: ScanSession) -> list[dict]:
             rank=idx + 1
         )
         db_session.add(fm)
+        
+    # 8. Generate Value Propositions
+    claim_scores = db_session.query(ClaimScore).filter(ClaimScore.scan_id == scan_session.id).all()
+    generate_value_propositions(db_session, scan_session, claim_scores)
+    
+    # 9. Commit
+    scan_session.status = "completed"
     db_session.commit()
         
     return results
