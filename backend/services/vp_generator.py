@@ -73,8 +73,23 @@ def generate_value_propositions(db_session: Session, scan_session: ScanSession, 
         channels = get_channel_fit(scan_session.persona_code)
         
         # 5. Assemble and save
-        window_str = f"{claim.first_mover_window_months} months" if claim.first_mover_window_months else "Not time-sensitive"
+        # 5. Dynamic Trend Velocity AI Prediction
+        from services.gemini_client import predict_trend_velocity
+        trend_data = predict_trend_velocity(claim.claim_code)
         
+        if trend_data:
+            trend_dir = trend_data["trend_direction"]
+            trend_vel = trend_data["trend_velocity_score"]
+        else:
+            trend_dir = claim.trend_direction
+            trend_vel = claim.trend_velocity_score
+            
+        # Re-calculate first_mover_window if trend changed
+        window_str = "Not time-sensitive"
+        if trend_dir == "rising" and claim.tier_cds_score < 30:
+            val = round((30 - claim.tier_cds_score) / max(1.0, (trend_vel / 10.0)))
+            window_str = f"{int(max(1, val))} months"
+            
         vp = ValueProposition(
             scan_id=scan_session.id,
             rank=idx + 1,
@@ -99,8 +114,8 @@ def generate_value_propositions(db_session: Session, scan_session: ScanSession, 
             price_band_min=price_band["price_band_min"],
             price_band_max=price_band["price_band_max"],
             first_mover_window=window_str,
-            trend_direction=claim.trend_direction,
-            trend_velocity_score=claim.trend_velocity_score,
+            trend_direction=trend_dir,
+            trend_velocity_score=trend_vel,
             channel_fit=channels
         )
         db_session.add(vp)

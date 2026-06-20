@@ -138,13 +138,16 @@ def run_full_scan(db_session: Session, scan_session: ScanSession) -> list[dict]:
             bps_score=bps_score
         )
         
-        # Trend data
+        # 7. Add Trend Velocity mock data + Channel Fit
         from data.trend_seed import get_trend_data
+        
         trend_data = get_trend_data(claim_code)
+        trend_direction = trend_data["trend_direction"]
+        trend_velocity_score = trend_data["trend_velocity_score"]
         
         first_mover_window = None
-        if trend_data["trend_direction"] == "rising" and tier_cds_score < 30:
-            val = round((30 - tier_cds_score) / (trend_data["trend_velocity_score"] / 10.0))
+        if trend_direction == "rising" and tier_cds_score < 30:
+            val = round((30 - tier_cds_score) / (trend_velocity_score / 10.0))
             first_mover_window = int(max(1, val))
         
         # 4. Save to ClaimScore
