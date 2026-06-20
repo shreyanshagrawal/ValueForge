@@ -8,3 +8,5 @@ numpy
 scikit-learn
 pytest
 pytest-asyncio
+jinja2
+xhtml2pdf

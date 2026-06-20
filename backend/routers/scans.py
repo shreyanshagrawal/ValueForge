@@ -79,3 +79,23 @@ def get_scan_vps(scan_id: str, db: Session = Depends(get_db)):
     if not vps:
         raise HTTPException(status_code=404, detail="No value propositions found for this scan.")
     return vps
+
+from fastapi.responses import FileResponse
+from services.brief_generator import generate_brief_pdf
+import os
+
+@router.post("/{scan_id}/brief")
+def generate_brief(scan_id: str, db: Session = Depends(get_db)):
+    try:
+        generate_brief_pdf(db, scan_id)
+        return {"status": "ready", "download_url": f"/api/v1/scans/{scan_id}/brief/download"}
+    except Exception as e:
+        print(f"Error generating brief: {traceback.format_exc()}")
+        raise HTTPException(status_code=500, detail=f"Failed to generate brief: {str(e)}")
+
+@router.get("/{scan_id}/brief/download")
+def download_brief(scan_id: str):
+    pdf_path = os.path.join(os.path.dirname(__file__), '..', 'generated_briefs', f"{scan_id}.pdf")
+    if not os.path.exists(pdf_path):
+        raise HTTPException(status_code=404, detail="Brief not found. Generate it first.")
+    return FileResponse(pdf_path, media_type='application/pdf', filename=f"Brand_Brief_{scan_id}.pdf")

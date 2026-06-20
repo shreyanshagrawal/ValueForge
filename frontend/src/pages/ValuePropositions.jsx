@@ -56,9 +56,22 @@ function ValuePropositions() {
         <h2>Product Value Propositions</h2>
         <button 
           className="btn-outline" 
-          onClick={() => alert("Brand Brief Export coming soon!")}
+          onClick={async () => {
+            try {
+              setLoading(true);
+              const res = await apiClient.post(`/scans/${scanId}/brief`);
+              if (res.data.status === 'ready') {
+                window.location.href = `http://localhost:8000${res.data.download_url}`;
+              }
+            } catch (err) {
+              alert('Failed to generate brand brief.');
+            } finally {
+              setLoading(false);
+            }
+          }}
+          disabled={loading}
         >
-          ⬇ Download Brand Brief
+          {loading ? 'Generating...' : '⬇ Download Brand Brief'}
         </button>
       </div>
 
