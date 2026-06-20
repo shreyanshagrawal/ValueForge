@@ -1,7 +1,7 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks
 from sqlalchemy.orm import Session
 from typing import List
-from db import get_db
+from db import get_db, SessionLocal
 from models.models import ScanSession, ClaimScore, Claim, MisalignmentFlag, FailureMatch
 from schemas.scan_schemas import (
     ScanCreateRequest, 
@@ -12,14 +12,19 @@ from schemas.scan_schemas import (
     ValuePropositionResponse,
     AuthenticTerritoryResponse
 )
-from services.orchestrator import run_full_scan
+from services.orchestrator import run_full_scan_background
 from services.nlp_extractor import extract_claim_signals
 import traceback
 
 router = APIRouter()
 
+@router.get("", response_model=List[ScanSessionResponse])
+def list_scans(db: Session = Depends(get_db)):
+    scans = db.query(ScanSession).order_by(ScanSession.created_at.desc()).limit(10).all()
+    return scans
+
 @router.post("", response_model=ScanSessionResponse)
-def create_scan(request: ScanCreateRequest, db: Session = Depends(get_db)):
+def create_scan(request: ScanCreateRequest, background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
     data_src = "live" if (request.use_live_data and request.category_code == "protein_bars") else "seed"
     scan_session = ScanSession(
         product_name=request.product_name,
@@ -35,22 +40,7 @@ def create_scan(request: ScanCreateRequest, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(scan_session)
     
-    try:
-        # Extract claim signals
-        all_claims = [c.claim_code for c in db.query(Claim).all()]
-        extracted = extract_claim_signals(scan_session.primary_benefit_idea, all_claims)
-        scan_session.extracted_claim_signals = extracted
-        db.commit()
-        
-        run_full_scan(db, scan_session)
-        scan_session.status = "complete"
-    except Exception as e:
-        scan_session.status = f"failed: {str(e)}"
-        print(f"Error in run_full_scan: {traceback.format_exc()}")
-        
-    db.commit()
-    db.refresh(scan_session)
-    
+    background_tasks.add_task(run_full_scan_background, scan_session.id)
     return scan_session
 
 @router.get("/{scan_id}", response_model=ScanSessionResponse)

@@ -6,8 +6,37 @@ from services.brand_permission import compute_bps
 from services.misalignment_engine import generate_misalignment_flags
 from services.failure_matcher import find_matching_failures
 from services.vp_generator import generate_value_propositions
+import traceback
+from db import SessionLocal
+from models.models import Claim
+from services.nlp_extractor import extract_claim_signals
+
+def run_full_scan_background(scan_id: str):
+    db_session = SessionLocal()
+    try:
+        scan_session = db_session.query(ScanSession).filter(ScanSession.id == scan_id).first()
+        if not scan_session:
+            return
+        
+        scan_session.status = "extracting_claims"
+        db_session.commit()
+        all_claims = [c.claim_code for c in db_session.query(Claim).all()]
+        extracted = extract_claim_signals(scan_session.primary_benefit_idea, all_claims)
+        scan_session.extracted_claim_signals = extracted
+        db_session.commit()
+        
+        run_full_scan(db_session, scan_session)
+        
+    except Exception as e:
+        scan_session.status = f"failed: {str(e)}"
+        print(f"Error in run_full_scan_background: {traceback.format_exc()}")
+        db_session.commit()
+    finally:
+        db_session.close()
 
 def run_full_scan(db_session: Session, scan_session: ScanSession) -> list[dict]:
+    scan_session.status = "scoring_claims"
+    db_session.commit()
     # 1. Fetch persona
     persona = db_session.query(Persona).filter(Persona.code == scan_session.persona_code).first()
     if not persona:
@@ -147,6 +176,8 @@ def run_full_scan(db_session: Session, scan_session: ScanSession) -> list[dict]:
         db_session.commit()
         
     # 7. Run Failure Matching
+    scan_session.status = "matching_failures"
+    db_session.commit()
     matched_failures = find_matching_failures(db_session, scan_session)
     for idx, match in enumerate(matched_failures):
         fm = FailureMatch(
@@ -158,11 +189,13 @@ def run_full_scan(db_session: Session, scan_session: ScanSession) -> list[dict]:
         db_session.add(fm)
         
     # 8. Generate Value Propositions
+    scan_session.status = "generating_vps"
+    db_session.commit()
     claim_scores = db_session.query(ClaimScore).filter(ClaimScore.scan_id == scan_session.id).all()
     generate_value_propositions(db_session, scan_session, claim_scores)
     
     # 9. Commit
-    scan_session.status = "completed"
+    scan_session.status = "complete"
     db_session.commit()
         
     return results

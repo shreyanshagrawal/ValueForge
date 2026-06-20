@@ -176,7 +176,7 @@ export default function WhitespaceGrid() {
 
       {/* Expanded Cell Panel */}
       {activeCell && (
-        <div className="glass-panel" style={{ padding: '24px', marginBottom: '40px', borderLeft: '4px solid var(--accent-color)' }}>
+        <div className="glass-panel animate-slide-up" style={{ padding: '24px', marginBottom: '40px', borderLeft: '4px solid var(--accent-color)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
             <h3 style={{ margin: 0 }}>
               {activeCell.cat} Claims in {activeCell.buck} Market

@@ -1,14 +1,13 @@
 import requests
-import json
 import time
 
 payload = {
-    "product_name": "NaturaSnack",
-    "category_code": "snack_foods",
-    "persona_code": "urban_health_seeker",
-    "primary_benefit_idea": "A natural, doctor recommended snack food with high fibre and high protein for wellness.",
-    "key_ingredient": "Oats",
-    "target_price_tier": "premium",
+    "product_name": "Zenith Energy",
+    "category_code": "energy_drinks",
+    "persona_code": "fitness_enthusiast",
+    "primary_benefit_idea": "A plant-based, no sugar energy drink optimized for sustained performance and focus.",
+    "key_ingredient": "Matcha",
+    "target_price_tier": "ultra_premium",
     "use_live_data": False
 }
 
@@ -16,17 +15,21 @@ print("Starting scan...")
 res = requests.post("http://localhost:8000/api/v1/scans", json=payload)
 print(res.status_code, res.text)
 scan = res.json()
-print("Scan ID:", scan["id"])
+scan_id = scan["id"]
+print("Scan ID:", scan_id)
 
-print("Getting claims...")
-res_claims = requests.get(f"http://localhost:8000/api/v1/scans/{scan['id']}/claims")
-print("Claims summary:")
-claims = res_claims.json()
-for c in claims:
-    print(f"  - {c['claim_code']} -> {c['whitespace_classification']}")
+while True:
+    status_res = requests.get(f"http://localhost:8000/api/v1/scans/{scan_id}")
+    status = status_res.json()["status"]
+    print("Status:", status)
+    if status == "complete" or status.startswith("failed"):
+        break
+    time.sleep(1.5)
+
+print("Scan Finished!")
 
 print("Getting failure risks...")
-res_fails = requests.get(f"http://localhost:8000/api/v1/scans/{scan['id']}/failure-risks")
+res_fails = requests.get(f"http://localhost:8000/api/v1/scans/{scan_id}/failure-risks")
 fails = res_fails.json()
 print("Failure matches:")
 for f in fails:

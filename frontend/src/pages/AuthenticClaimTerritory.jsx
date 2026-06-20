@@ -72,7 +72,7 @@ export default function AuthenticClaimTerritory() {
       </div>
       
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 350px', gap: '32px', marginBottom: '40px' }}>
-        <div className="glass-panel" style={{ padding: '24px', height: '500px' }}>
+        <div className="glass-panel animate-fade-in stagger-1" style={{ padding: '24px', height: '500px' }}>
           <ResponsiveContainer width="100%" height="100%">
             <RadarChart cx="50%" cy="50%" outerRadius="80%" data={chartData}>
               <PolarGrid stroke="var(--border-color)" />
@@ -98,7 +98,7 @@ export default function AuthenticClaimTerritory() {
         </div>
         
         <div>
-          <div className="glass-panel" style={{ padding: '24px', marginBottom: '24px', background: 'var(--panel-bg)' }}>
+          <div className="glass-panel animate-slide-up stagger-2" style={{ padding: '24px', marginBottom: '24px', background: 'var(--panel-bg)' }}>
             <h3 style={{ margin: '0 0 16px 0', color: 'var(--text-primary)' }}>What is this?</h3>
             <p style={{ color: 'var(--text-secondary)', lineHeight: '1.6', fontSize: '0.95rem' }}>
               <strong>Authentic Claim Territory</strong> is where all three dimensions align — the market has room, consumers want it, and your brand can credibly claim it.
@@ -106,7 +106,7 @@ export default function AuthenticClaimTerritory() {
             </p>
           </div>
           
-          <div className="glass-panel" style={{ padding: '24px', borderTop: '4px solid var(--primary-teal)' }}>
+          <div className="glass-panel animate-slide-up stagger-3" style={{ padding: '24px', borderTop: '4px solid var(--primary-teal)' }}>
             <h3 style={{ margin: '0 0 16px 0' }}>Qualifying Claims ({authenticClaims.length})</h3>
             {authenticClaims.length === 0 ? (
               <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>

@@ -127,9 +127,10 @@ function ValuePropositions() {
 
       {/* VP Cards Grid */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
-        {vps.map((vp) => (
+        {vps.map((vp, index) => (
           <div 
             key={vp.id} 
+            className={`animate-slide-up stagger-${(index % 4) + 1}`}
             style={{ 
               backgroundColor: 'var(--card-bg)', 
               borderRadius: 'var(--radius-lg)', 

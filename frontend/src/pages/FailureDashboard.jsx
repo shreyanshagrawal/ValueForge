@@ -57,10 +57,10 @@ export default function FailureDashboard() {
       </p>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', marginBottom: '40px' }}>
-        {failures.map((match) => {
+        {failures.map((match, index) => {
           const f = match.failure_case;
           return (
-            <div key={match.id} className="glass-panel" style={{ 
+            <div key={match.id} className={`glass-panel animate-slide-up stagger-${(index % 4) + 1}`} style={{ 
               padding: '24px', 
               borderLeft: '4px solid var(--danger-color)',
               background: 'linear-gradient(90deg, rgba(239, 68, 68, 0.05) 0%, var(--panel-bg) 100%)'
