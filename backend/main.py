@@ -34,6 +34,9 @@ async def global_exception_handler(request: Request, exc: Exception):
 
 import os
 frontend_url = os.getenv("FRONTEND_URL", "*")
+if frontend_url != "*" and frontend_url.endswith("/"):
+    frontend_url = frontend_url[:-1]
+
 if frontend_url == "*":
     origins = ["*"]
     allow_credentials = False
