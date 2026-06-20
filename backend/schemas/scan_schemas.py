@@ -79,11 +79,19 @@ class ScanResultResponse(BaseModel):
 class ValuePropositionResponse(BaseModel):
     id: str
     rank: int
+    claim_code: str
     headline: str
     subclaim_1: str
     subclaim_2: str
     fos_score: float
     bps_score: float
+    tier_cds_score: float
+    cds_zone: str
+    crs_score: float
+    crs_believability: float
+    crs_relevance: float
+    crs_fatigue_inverse: float
+    crs_trigger_alignment: float
     whitespace_classification: str
     hero_ingredients: List[str]
     ingredient_rationale: str
