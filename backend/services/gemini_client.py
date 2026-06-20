@@ -17,7 +17,7 @@ if api_key and api_key != "your_key_here":
 else:
     logger.warning("GEMINI_API_KEY is not set or is still the placeholder. Please set it in .env")
 
-def generate_text(prompt: str, model: str = "gemini-1.5-flash") -> str:
+def generate_text(prompt: str, model: str = "gemini-2.5-flash") -> str:
     """
     Wraps a simple text generation call with basic error handling.
     """
@@ -35,7 +35,7 @@ def get_embedding(text: str) -> list[float]:
     """
     try:
         result = genai.embed_content(
-            model="models/text-embedding-004",
+            model="models/gemini-embedding-2",
             content=text,
             task_type="retrieval_document",
         )

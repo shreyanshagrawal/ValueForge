@@ -6,3 +6,5 @@ python-dotenv
 google-generativeai
 numpy
 scikit-learn
+pytest
+pytest-asyncio
