@@ -69,6 +69,8 @@ def generate_value_propositions(db_session: Session, scan_session: ScanSession, 
         channels = get_channel_fit(scan_session.persona_code)
         
         # 5. Assemble and save
+        window_str = f"{claim.first_mover_window_months} months" if claim.first_mover_window_months else "Not time-sensitive"
+        
         vp = ValueProposition(
             scan_id=scan_session.id,
             rank=idx + 1,
@@ -92,7 +94,9 @@ def generate_value_propositions(db_session: Session, scan_session: ScanSession, 
             packaging_direction=format_rec["packaging_direction"],
             price_band_min=price_band["price_band_min"],
             price_band_max=price_band["price_band_max"],
-            first_mover_window="6-9 months",
+            first_mover_window=window_str,
+            trend_direction=claim.trend_direction,
+            trend_velocity_score=claim.trend_velocity_score,
             channel_fit=channels
         )
         db_session.add(vp)

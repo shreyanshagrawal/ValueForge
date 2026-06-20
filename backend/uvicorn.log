@@ -1,0 +1,180 @@
+INFO:     Will watch for changes in these directories: ['/Users/shreyansh/Documents/Coding/hackathon/valueforge/backend']
+/Users/shreyansh/Documents/Coding/hackathon/valueforge/backend/services/gemini_client.py:3: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [34747] using StatReload
+Seeded 25 mock FailureCase entries.
+Generating embeddings for 25 failure cases...
+[1/25] Generated embedding for MockBrand Protein Bars V1
+[2/25] Generated embedding for MockBrand Functional Beverages V2
+[3/25] Generated embedding for MockBrand Snack Foods V3
+[4/25] Generated embedding for MockBrand Supplements V4
+[5/25] Generated embedding for MockBrand Energy Drinks V5
+[6/25] Generated embedding for MockBrand Protein Bars V6
+[7/25] Generated embedding for MockBrand Functional Beverages V7
+[8/25] Generated embedding for MockBrand Snack Foods V8
+[9/25] Generated embedding for MockBrand Supplements V9
+[10/25] Generated embedding for MockBrand Energy Drinks V10
+[11/25] Generated embedding for MockBrand Protein Bars V11
+[12/25] Generated embedding for MockBrand Functional Beverages V12
+[13/25] Generated embedding for MockBrand Snack Foods V13
+[14/25] Generated embedding for MockBrand Supplements V14
+[15/25] Generated embedding for MockBrand Energy Drinks V15
+[16/25] Generated embedding for MockBrand Protein Bars V16
+[17/25] Generated embedding for MockBrand Functional Beverages V17
+[18/25] Generated embedding for MockBrand Snack Foods V18
+[19/25] Generated embedding for MockBrand Supplements V19
+[20/25] Generated embedding for MockBrand Energy Drinks V20
+[21/25] Generated embedding for MockBrand Protein Bars V21
+[22/25] Generated embedding for MockBrand Functional Beverages V22
+[23/25] Generated embedding for MockBrand Snack Foods V23
+[24/25] Generated embedding for MockBrand Supplements V24
+[25/25] Generated embedding for MockBrand Energy Drinks V25
+Finished generating failure embeddings.
+I0621 00:36:20.591304 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591349 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591353 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591357 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591360 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591362 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591364 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591366 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591368 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591370 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591372 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591374 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591376 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591377 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591379 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591381 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591383 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591384 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591386 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591388 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591390 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591391 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591393 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591395 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591396 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591398 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591400 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591402 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591403 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591405 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591407 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591409 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591410 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591412 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591414 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591416 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591417 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591419 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591421 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591422 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591424 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591426 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591428 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591430 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591431 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591433 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591435 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591437 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591438 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591440 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591442 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591443 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591445 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591447 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591448 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591450 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591452 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591458 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591467 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591470 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591473 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591475 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591477 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591479 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591481 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591483 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591485 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591487 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591488 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591490 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591492 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591494 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591496 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591524 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591530 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591532 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591534 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591536 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591538 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591539 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591541 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591543 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591545 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591547 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591577 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591582 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591603 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591606 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591609 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591631 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591634 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591637 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591656 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591660 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591663 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591665 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591684 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591687 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591690 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.591692 4801913 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.595218 4801941 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.595283 4801941 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.595291 4801941 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.595298 4801941 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.595304 4801941 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.595310 4801941 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.595316 4801941 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.595322 4801941 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.595327 4801941 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.595333 4801941 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.595338 4801941 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.595343 4801941 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.595348 4801941 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.595353 4801941 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.595358 4801941 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.595363 4801941 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.595368 4801941 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.595373 4801941 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.595377 4801941 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.595382 4801941 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.595388 4801941 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.595393 4801941 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.595399 4801941 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.595407 4801941 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+I0621 00:36:20.595412 4801941 ev_poll_posix.cc:593] FD from fork parent still in poll list: fd(9, generation: 1)
+/Users/shreyansh/Documents/Coding/hackathon/valueforge/backend/services/gemini_client.py:3: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+INFO:     Started server process [34778]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+All failure cases already have embeddings.
+INFO:     127.0.0.1:60117 - "GET /api/v1/scans/75326e71-282c-4357-bc60-82d009c689c1/value-propositions HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:60123 - "GET /api/v1/scans/6a5db474-559a-4670-956c-5b56ddbfe9e8/value-propositions HTTP/1.1" 200 OK

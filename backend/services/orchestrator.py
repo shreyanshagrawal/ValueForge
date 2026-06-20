@@ -83,6 +83,15 @@ def run_full_scan(db_session: Session, scan_session: ScanSession) -> list[dict]:
             bps_score=bps_score
         )
         
+        # Trend data
+        from data.trend_seed import get_trend_data
+        trend_data = get_trend_data(claim_code)
+        
+        first_mover_window = None
+        if trend_data["trend_direction"] == "rising" and tier_cds_score < 30:
+            val = round((30 - tier_cds_score) / (trend_data["trend_velocity_score"] / 10.0))
+            first_mover_window = int(max(1, val))
+        
         # 4. Save to ClaimScore
         cs = ClaimScore(
             scan_id=scan_session.id,
@@ -96,7 +105,10 @@ def run_full_scan(db_session: Session, scan_session: ScanSession) -> list[dict]:
             crs_score=crs_score,
             bps_score=bps_score,
             fos_score=fos_res["fos_score"],
-            whitespace_classification=fos_res["whitespace_classification"]
+            whitespace_classification=fos_res["whitespace_classification"],
+            trend_direction=trend_data["trend_direction"],
+            trend_velocity_score=trend_data["trend_velocity_score"],
+            first_mover_window_months=first_mover_window
         )
         db_session.add(cs)
         

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import client from '../api/client';
 import Stepper from '../components/Stepper';
-import { LayoutGrid, ArrowRight, X } from 'lucide-react';
+import { LayoutGrid, ArrowRight, X, TrendingUp, TrendingDown, Minus } from 'lucide-react';
 
 const CATEGORIES = ["Energy", "Recovery", "Immunity", "Taste", "Convenience", "Sustainability"];
 const BUCKETS = ["Underserved", "Moderate", "Saturated"];
@@ -16,6 +16,14 @@ const CLASS_COLORS = {
 };
 
 export default function WhitespaceGrid() {
+// ... omitting for a cleaner replace
+
+  const renderTrendIcon = (c) => {
+    if (c.trend_direction === 'rising') return <TrendingUp size={16} color="#10b981" title={`Rising (+${c.trend_velocity_score}%)`} />;
+    if (c.trend_direction === 'declining') return <TrendingDown size={16} color="#ef4444" title={`Declining (${c.trend_velocity_score}%)`} />;
+    if (c.trend_direction === 'peaking') return <Minus size={16} color="#eab308" title={`Peaking (+${c.trend_velocity_score}%)`} />;
+    return null;
+  };
   const { scanId } = useParams();
   const navigate = useNavigate();
   const [gridData, setGridData] = useState([]);
@@ -91,7 +99,7 @@ export default function WhitespaceGrid() {
           <div style={{ width: '16px', height: '16px', background: CLASS_COLORS.contested, borderRadius: '4px' }}></div> Contested
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <div style={{ width: '16px', height: '16px', background: 'rgba(255,255,255,0.05)', border: '1px dashed rgba(255,255,255,0.2)', borderRadius: '4px' }}></div> Empty
+          <div style={{ width: '16px', height: '16px', background: 'var(--bg-color)', border: '1px dashed var(--border-color)', borderRadius: '4px' }}></div> Empty
         </div>
       </div>
 
@@ -116,7 +124,7 @@ export default function WhitespaceGrid() {
               const avgBps = getAverageBps(claims);
               
               const isEmpty = claims.length === 0;
-              const baseColor = isEmpty ? 'rgba(255,255,255,0.05)' : CLASS_COLORS[domClass] || CLASS_COLORS.consumer_whitespace;
+              const baseColor = isEmpty ? 'var(--bg-color)' : CLASS_COLORS[domClass] || CLASS_COLORS.consumer_whitespace;
               // Opacity logic: map BPS (40-90) to 0.3 - 1.0
               const opacity = isEmpty ? 1 : Math.max(0.3, Math.min(1.0, avgBps / 100));
 
@@ -129,7 +137,7 @@ export default function WhitespaceGrid() {
                     backgroundColor: baseColor,
                     opacity: opacity,
                     borderRadius: '8px',
-                    border: isEmpty ? '1px dashed rgba(255,255,255,0.1)' : 'none',
+                    border: isEmpty ? '1px dashed var(--border-color)' : 'none',
                     cursor: 'pointer',
                     display: 'flex',
                     alignItems: 'center',
@@ -171,8 +179,11 @@ export default function WhitespaceGrid() {
           ) : (
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '16px' }}>
               {activeCell.claims.map(c => (
-                <div key={c.claim_code} style={{ background: 'rgba(0,0,0,0.3)', padding: '16px', borderRadius: '8px', border: `1px solid ${CLASS_COLORS[c.whitespace_classification] || '#555'}` }}>
-                  <h4 style={{ margin: '0 0 12px 0', textTransform: 'capitalize' }}>{c.claim_code.replace(/_/g, ' ')}</h4>
+                <div key={c.claim_code} style={{ background: 'var(--bg-color)', padding: '16px', borderRadius: '8px', border: `1px solid ${CLASS_COLORS[c.whitespace_classification] || 'var(--border-color)'}` }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+                    <h4 style={{ margin: 0, textTransform: 'capitalize' }}>{c.claim_code.replace(/_/g, ' ')}</h4>
+                    {renderTrendIcon(c)}
+                  </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '4px' }}>
                     <span>Final Opportunity Score:</span>
                     <span style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{c.fos_score.toFixed(1)}</span>
@@ -181,7 +192,7 @@ export default function WhitespaceGrid() {
                     <span>Brand Permission:</span>
                     <span style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{c.bps_score.toFixed(1)}</span>
                   </div>
-                  <div style={{ marginTop: '12px', fontSize: '0.75rem', textTransform: 'uppercase', padding: '4px 8px', background: 'rgba(255,255,255,0.1)', borderRadius: '4px', display: 'inline-block', color: CLASS_COLORS[c.whitespace_classification] || '#fff' }}>
+                  <div style={{ marginTop: '12px', fontSize: '0.75rem', textTransform: 'uppercase', padding: '4px 8px', background: 'var(--card-bg)', borderRadius: '4px', display: 'inline-block', color: CLASS_COLORS[c.whitespace_classification] || 'var(--text-main)' }}>
                     {c.whitespace_classification.replace(/_/g, ' ')}
                   </div>
                 </div>

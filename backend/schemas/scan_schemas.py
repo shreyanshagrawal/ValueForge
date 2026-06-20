@@ -47,6 +47,9 @@ class ClaimScoreResponse(BaseModel):
     bps_score: float
     fos_score: float
     whitespace_classification: str
+    trend_direction: Optional[str] = None
+    trend_velocity_score: Optional[float] = None
+    first_mover_window_months: Optional[int] = None
 
     class Config:
         from_attributes = True
@@ -101,6 +104,8 @@ class ValuePropositionResponse(BaseModel):
     price_band_min: float
     price_band_max: float
     first_mover_window: str
+    trend_direction: Optional[str] = None
+    trend_velocity_score: Optional[float] = None
     channel_fit: list[str]
     whitespace_classification: str
 

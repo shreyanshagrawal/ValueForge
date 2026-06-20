@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import apiClient from '../api/client';
 import Stepper from '../components/Stepper';
+import { TrendingUp, TrendingDown, Minus } from 'lucide-react';
 
 function ValuePropositions() {
   const { scanId } = useParams();
@@ -206,7 +207,12 @@ function ValuePropositions() {
                 </div>
                 <div>
                   <strong style={{ fontSize: '0.75rem', textTransform: 'uppercase', color: 'var(--text-muted)' }}>Trend Window</strong>
-                  <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.875rem' }}>{vp.first_mover_window}</p>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', margin: '0.25rem 0 0 0' }}>
+                    {vp.trend_direction === 'rising' && <TrendingUp size={16} color="#10b981" title={`Rising (+${vp.trend_velocity_score}%)`} />}
+                    {vp.trend_direction === 'declining' && <TrendingDown size={16} color="#ef4444" title={`Declining (${vp.trend_velocity_score}%)`} />}
+                    {vp.trend_direction === 'peaking' && <Minus size={16} color="#eab308" title={`Peaking (+${vp.trend_velocity_score}%)`} />}
+                    <span style={{ fontSize: '0.875rem' }}>{vp.first_mover_window}</span>
+                  </div>
                 </div>
               </div>
 

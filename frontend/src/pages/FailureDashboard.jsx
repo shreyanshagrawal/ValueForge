@@ -87,12 +87,12 @@ export default function FailureDashboard() {
               </div>
               
               <div style={{ 
-                background: 'rgba(0,0,0,0.2)', 
+                background: 'var(--bg-color)', 
                 padding: '12px 16px', 
                 borderRadius: 'var(--border-radius-sm)',
                 borderLeft: '2px solid var(--text-muted)'
               }}>
-                <p style={{ margin: 0, fontSize: '0.9rem', fontStyle: 'italic', color: '#cbd5e1' }}>
+                <p style={{ margin: 0, fontSize: '0.9rem', fontStyle: 'italic', color: 'var(--text-main)' }}>
                   <strong>Lesson Learned:</strong> {f.lesson_learned}
                 </p>
               </div>
@@ -106,7 +106,7 @@ export default function FailureDashboard() {
         )}
       </div>
 
-      <div className="glass-panel" style={{ padding: '24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'rgba(0,0,0,0.3)' }}>
+      <div className="glass-panel" style={{ padding: '24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'var(--bg-color)' }}>
         <label style={{ display: 'flex', alignItems: 'center', gap: '12px', margin: 0, cursor: 'pointer', textTransform: 'none', color: 'var(--text-primary)', fontSize: '1rem' }}>
           <input 
             type="checkbox" 

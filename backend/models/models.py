@@ -101,6 +101,9 @@ class ClaimScore(Base):
     bps_score = Column(Float)
     fos_score = Column(Float)
     whitespace_classification = Column(String)
+    trend_direction = Column(String, nullable=True)
+    trend_velocity_score = Column(Float, nullable=True)
+    first_mover_window_months = Column(Integer, nullable=True)
 
     scan = relationship("ScanSession", back_populates="claim_scores")
 
@@ -142,6 +145,8 @@ class ValueProposition(Base):
     price_band_min = Column(Float)
     price_band_max = Column(Float)
     first_mover_window = Column(String)
+    trend_direction = Column(String, nullable=True)
+    trend_velocity_score = Column(Float, nullable=True)
     channel_fit = Column(JSON)
 
     scan = relationship("ScanSession", back_populates="value_propositions")
