@@ -40,6 +40,8 @@ venv.bak/
 valueforge.db
 generated_briefs/
 *.sqlite3
+uvicorn.log
+*.log
 
 # OS
 .DS_Store
