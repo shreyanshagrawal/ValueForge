@@ -31,10 +31,23 @@ def generate_brief_pdf(db_session: Session, scan_id: str) -> str:
     env = Environment(loader=FileSystemLoader(searchpath=os.path.join(os.path.dirname(__file__), '..', 'templates')))
     template = env.get_template('brand_brief.html')
 
+    authentic_territory = []
+    top_claims = sorted(claim_scores, key=lambda c: c.fos_score, reverse=True)[:10]
+    for c in top_claims:
+        mo = 100.0 - c.tier_cds_score if c.tier_cds_score is not None else 0.0
+        authentic_territory.append({
+            "claim_code": c.claim_code,
+            "market_openness": round(mo, 1),
+            "crs_score": round(c.crs_score, 1) if c.crs_score is not None else 0.0,
+            "bps_score": round(c.bps_score, 1) if c.bps_score is not None else 0.0,
+            "is_authentic": c.whitespace_classification == "true_whitespace"
+        })
+
     html_out = template.render(
         date=datetime.now().strftime("%Y-%m-%d"),
         scan=scan,
         claim_scores=claim_scores,
+        authentic_territory=authentic_territory,
         failure_matches=failure_matches,
         value_propositions=value_propositions,
         misalignment_flags=misalignment_flags,

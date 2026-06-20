@@ -80,29 +80,36 @@ class ScanResultResponse(BaseModel):
 
 class ValuePropositionResponse(BaseModel):
     id: str
+    scan_id: str
     rank: int
-    claim_code: str
     headline: str
     subclaim_1: str
     subclaim_2: str
     fos_score: float
-    bps_score: float
-    tier_cds_score: float
-    cds_zone: str
-    crs_score: float
-    crs_believability: float
-    crs_relevance: float
-    crs_fatigue_inverse: float
-    crs_trigger_alignment: float
-    whitespace_classification: str
-    hero_ingredients: List[str]
+    tier_cds_score: Optional[float]
+    cds_zone: Optional[str]
+    bps_score: Optional[float]
+    crs_score: Optional[float]
+    crs_believability: Optional[float]
+    crs_relevance: Optional[float]
+    crs_fatigue_inverse: Optional[float]
+    crs_trigger_alignment: Optional[float]
+    hero_ingredients: list[str]
     ingredient_rationale: str
     recommended_format: str
     packaging_direction: str
     price_band_min: float
     price_band_max: float
     first_mover_window: str
-    channel_fit: List[str]
+    channel_fit: list[str]
+    whitespace_classification: str
+
+class AuthenticTerritoryResponse(BaseModel):
+    claim_code: str
+    market_openness: float
+    crs_score: float
+    bps_score: float
+    is_authentic_territory: bool
 
     class Config:
         from_attributes = True

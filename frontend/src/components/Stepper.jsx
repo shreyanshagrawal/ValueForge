@@ -23,6 +23,7 @@ export default function Stepper({ scanId }) {
   const steps = [
     { name: "Failures", path: `/scan/${scanId}/failures`, id: "failures" },
     { name: "Whitespace Grid", path: `/scan/${scanId}/grid`, id: "grid" },
+    { name: "Authentic Territory", path: `/scan/${scanId}/territory`, id: "territory" },
     { name: "Propositions", path: `/scan/${scanId}/propositions`, id: "propositions" }
   ];
   

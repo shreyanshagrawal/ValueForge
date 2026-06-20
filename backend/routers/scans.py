@@ -9,7 +9,8 @@ from schemas.scan_schemas import (
     ClaimScoreResponse, 
     MisalignmentFlagResponse, 
     FailureMatchResponse,
-    ValuePropositionResponse
+    ValuePropositionResponse,
+    AuthenticTerritoryResponse
 )
 from services.orchestrator import run_full_scan
 from services.nlp_extractor import extract_claim_signals
@@ -81,6 +82,21 @@ def get_scan_vps(scan_id: str, db: Session = Depends(get_db)):
     if not vps:
         raise HTTPException(status_code=404, detail="No value propositions found for this scan.")
     return vps
+
+@router.get("/{scan_id}/authentic-territory", response_model=List[AuthenticTerritoryResponse])
+def get_authentic_territory(scan_id: str, db: Session = Depends(get_db)):
+    claims = db.query(ClaimScore).filter(ClaimScore.scan_id == scan_id).order_by(ClaimScore.fos_score.desc()).limit(10).all()
+    result = []
+    for c in claims:
+        mo = 100.0 - c.tier_cds_score if c.tier_cds_score is not None else 0.0
+        result.append(AuthenticTerritoryResponse(
+            claim_code=c.claim_code,
+            market_openness=mo,
+            crs_score=c.crs_score if c.crs_score is not None else 0.0,
+            bps_score=c.bps_score if c.bps_score is not None else 0.0,
+            is_authentic_territory=(c.whitespace_classification == "true_whitespace")
+        ))
+    return result
 
 from fastapi.responses import FileResponse
 from services.brief_generator import generate_brief_pdf
