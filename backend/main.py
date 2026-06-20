@@ -1,14 +1,22 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from db import Base, engine
+from db import Base, engine, SessionLocal
 import models.models # to ensure models are registered
-from routers import health, reference
+from routers import health, reference, scans
 from data.seed_data import seed_database
+from services.failure_cases_seed import seed_failure_cases
+from services.failure_embeddings import generate_and_store_failure_embeddings
 
 Base.metadata.create_all(bind=engine)
 
-# Seed database with initial data
-seed_database()
+# Seed data on startup
+db = SessionLocal()
+try:
+    seed_database()
+    seed_failure_cases(db)
+    generate_and_store_failure_embeddings(db)
+finally:
+    db.close()
 
 app = FastAPI(title="ValueForge API")
 
@@ -26,3 +34,4 @@ app.add_middleware(
 
 app.include_router(health.router, prefix="/api", tags=["Health"])
 app.include_router(reference.router, prefix="/api/v1", tags=["Reference"])
+app.include_router(scans.router, prefix="/api/v1/scans", tags=["Scans"])

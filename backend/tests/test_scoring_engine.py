@@ -2,7 +2,7 @@ import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from models.models import Base, CompetitorProduct, Persona
-from services.scoring_engine import compute_tier_cds
+from services.scoring_engine import compute_tier_cds, compute_crs, compute_fos_and_classification
 from services.intent_engine import compute_intent_adjusted_score
 
 # Test Database Setup
@@ -106,3 +106,34 @@ def test_compute_intent_adjusted_score_neutral():
     result = compute_intent_adjusted_score(persona, "sustainable")
     assert result["intent_score"] == 50.0
     assert "No strong signal" in result["reasoning"]
+
+def test_compute_crs():
+    # tier_cds=30 should give peak believability (95)
+    # "high_protein" should give relevance 85
+    # fatigue inverse based on hash
+    result = compute_crs(claim_code="high_protein", category_code="protein_bars", intent_score=85.0, tier_cds_score=30.0)
+    assert result["crs_believability"] == 95.0
+    assert result["crs_relevance"] == 85.0
+    assert result["crs_trigger_alignment"] == 85.0
+    assert "crs_score" in result
+
+def test_compute_fos_true_whitespace():
+    res = compute_fos_and_classification(tier_cds_score=20.0, crs_score=70.0, bps_score=80.0)
+    assert res["whitespace_classification"] == "true_whitespace"
+
+def test_compute_fos_brand_whitespace():
+    res = compute_fos_and_classification(tier_cds_score=20.0, crs_score=80.0, bps_score=30.0)
+    assert res["whitespace_classification"] == "brand_whitespace"
+
+def test_compute_fos_consumer_whitespace():
+    res = compute_fos_and_classification(tier_cds_score=20.0, crs_score=30.0, bps_score=70.0)
+    assert res["whitespace_classification"] == "consumer_whitespace"
+
+def test_compute_fos_conditional():
+    # tier < 50, bps > 40, but crs < 50
+    res = compute_fos_and_classification(tier_cds_score=40.0, crs_score=40.0, bps_score=50.0)
+    assert res["whitespace_classification"] == "conditional"
+
+def test_compute_fos_contested():
+    res = compute_fos_and_classification(tier_cds_score=70.0, crs_score=40.0, bps_score=30.0)
+    assert res["whitespace_classification"] == "contested"

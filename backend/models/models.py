@@ -49,11 +49,27 @@ class ScanSession(Base):
     primary_benefit_idea = Column(String)
     key_ingredient = Column(String)
     target_price_tier = Column(String)
+    extracted_claim_signals = Column(JSON, nullable=True)
     status = Column(String)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     claim_scores = relationship("ClaimScore", back_populates="scan")
+    misalignment_flags = relationship("MisalignmentFlag", back_populates="scan")
     value_propositions = relationship("ValueProposition", back_populates="scan")
+
+class MisalignmentFlag(Base):
+    __tablename__ = "misalignment_flags"
+    id = Column(String, primary_key=True, default=generate_uuid)
+    scan_id = Column(String, ForeignKey("scan_sessions.id"))
+    flagged_claim_code = Column(String)
+    flag_reason = Column(String)
+    tier_cds_at_flag = Column(Float)
+    crs_at_flag = Column(Float)
+    bps_at_flag = Column(Float)
+    suggested_replacement_code = Column(String, nullable=True)
+    explanation = Column(String)
+
+    scan = relationship("ScanSession", back_populates="misalignment_flags")
 
 class ClaimScore(Base):
     __tablename__ = "claim_scores"
