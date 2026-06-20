@@ -13,6 +13,15 @@ def run_full_scan(db_session: Session, scan_session: ScanSession) -> list[dict]:
     if not persona:
         raise ValueError(f"Persona '{scan_session.persona_code}' not found.")
         
+    live_data = None
+    if scan_session.data_source == "live":
+        from services.live_scan import fetch_live_competitor_claims
+        from models.models import Claim
+        all_claims = [c.claim_code for c in db_session.query(Claim).all()]
+        live_data = fetch_live_competitor_claims(scan_session.category_code, all_claims)
+        if not live_data:
+            scan_session.data_source = "seed"
+            
     # 2. Get all distinct claim_codes that appear anywhere in CompetitorProduct.claim_codes for that category
     products_in_category = db_session.query(CompetitorProduct).filter(
         CompetitorProduct.category_code == scan_session.category_code
@@ -24,6 +33,12 @@ def run_full_scan(db_session: Session, scan_session: ScanSession) -> list[dict]:
             for claim in p.claim_codes:
                 candidate_claims.add(claim)
                 
+    if live_data:
+        for p in live_data:
+            if p.get("claim_codes"):
+                for claim in p["claim_codes"]:
+                    candidate_claims.add(claim)
+                
     # 3. For each candidate claim:
     results = []
     for claim_code in candidate_claims:
@@ -32,7 +47,8 @@ def run_full_scan(db_session: Session, scan_session: ScanSession) -> list[dict]:
             db_session=db_session, 
             claim_code=claim_code, 
             category_code=scan_session.category_code, 
-            target_price_tier=scan_session.target_price_tier
+            target_price_tier=scan_session.target_price_tier,
+            live_data=live_data
         )
         tier_cds_score = tier_cds_res["tier_cds_score"]
         

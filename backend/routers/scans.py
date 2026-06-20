@@ -19,6 +19,7 @@ router = APIRouter()
 
 @router.post("", response_model=ScanSessionResponse)
 def create_scan(request: ScanCreateRequest, db: Session = Depends(get_db)):
+    data_src = "live" if (request.use_live_data and request.category_code == "protein_bars") else "seed"
     scan_session = ScanSession(
         product_name=request.product_name,
         category_code=request.category_code,
@@ -26,7 +27,8 @@ def create_scan(request: ScanCreateRequest, db: Session = Depends(get_db)):
         primary_benefit_idea=request.primary_benefit_idea,
         key_ingredient=request.key_ingredient,
         target_price_tier=request.target_price_tier,
-        status="pending"
+        status="pending",
+        data_source=data_src
     )
     db.add(scan_session)
     db.commit()

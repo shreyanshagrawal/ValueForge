@@ -51,6 +51,7 @@ class ScanSession(Base):
     target_price_tier = Column(String)
     extracted_claim_signals = Column(JSON, nullable=True)
     status = Column(String)
+    data_source = Column(String, default="seed")
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     claim_scores = relationship("ClaimScore", back_populates="scan")

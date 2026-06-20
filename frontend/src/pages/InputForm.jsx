@@ -16,7 +16,8 @@ export default function InputForm() {
     persona_code: '',
     primary_benefit_idea: '',
     key_ingredient: '',
-    target_price_tier: 'mid'
+    target_price_tier: 'mid',
+    use_live_data: false
   });
 
   useEffect(() => {
@@ -44,8 +45,8 @@ export default function InputForm() {
   }, []);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(f => ({ ...f, [name]: value }));
+    const { name, value, type, checked } = e.target;
+    setFormData(f => ({ ...f, [name]: type === 'checkbox' ? checked : value }));
   };
 
   const handleSubmit = async (e) => {
@@ -138,6 +139,23 @@ export default function InputForm() {
                   <option value="premium">Premium</option>
                   <option value="ultra-premium">Ultra-Premium</option>
                 </select>
+              </div>
+            </div>
+            
+            <div style={{ marginTop: '16px', padding: '12px', background: 'rgba(255,255,255,0.05)', borderRadius: '8px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <input 
+                type="checkbox" 
+                id="use_live_data" 
+                name="use_live_data" 
+                checked={formData.use_live_data} 
+                onChange={handleChange}
+                disabled={formData.category_code !== 'protein_bars'}
+              />
+              <label htmlFor="use_live_data" style={{ margin: 0, fontWeight: 'normal' }}>
+                Use live market data (protein bars only, experimental)
+              </label>
+              <div style={{ marginLeft: 'auto', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+                Fetches real current listings instead of the demo dataset.
               </div>
             </div>
             

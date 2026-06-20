@@ -8,6 +8,7 @@ class ScanCreateRequest(BaseModel):
     primary_benefit_idea: str
     key_ingredient: Optional[str] = None
     target_price_tier: str
+    use_live_data: bool = False
 
 class ScanSessionResponse(BaseModel):
     id: str
@@ -19,6 +20,7 @@ class ScanSessionResponse(BaseModel):
     target_price_tier: str
     extracted_claim_signals: Optional[List[str]] = None
     status: str
+    data_source: str = "seed"
 
     class Config:
         from_attributes = True

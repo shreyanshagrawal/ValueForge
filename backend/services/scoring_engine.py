@@ -2,16 +2,26 @@ from sqlalchemy.orm import Session
 from models.models import CompetitorProduct
 from services.brand_permission import get_stable_hash_score
 
-def compute_tier_cds(db_session: Session, claim_code: str, category_code: str, target_price_tier: str) -> dict:
+def compute_tier_cds(db_session: Session, claim_code: str, category_code: str, target_price_tier: str, live_data: list = None) -> dict:
     """
     Computes the Tier-Adjusted Claim Density Score (Tier-CDS), the Market Dimension of our 3-dimension model.
     """
-    products_at_tier = db_session.query(CompetitorProduct).filter(
-        CompetitorProduct.category_code == category_code,
-        CompetitorProduct.price_tier == target_price_tier
-    ).all()
-
-    total_products_at_tier = len(products_at_tier)
+    if live_data is not None:
+        db_products = db_session.query(CompetitorProduct).filter(
+            CompetitorProduct.category_code == category_code,
+            CompetitorProduct.price_tier == target_price_tier
+        ).all()
+        db_list = [{"claim_codes": p.claim_codes} for p in db_products]
+        live_list = [{"claim_codes": p.get("claim_codes", [])} for p in live_data if p.get("category_code") == category_code and p.get("price_tier") == target_price_tier]
+        all_products = db_list + live_list
+        total_products_at_tier = len(all_products)
+    else:
+        products_at_tier = db_session.query(CompetitorProduct).filter(
+            CompetitorProduct.category_code == category_code,
+            CompetitorProduct.price_tier == target_price_tier
+        ).all()
+        total_products_at_tier = len(products_at_tier)
+        all_products = [{"claim_codes": p.claim_codes} for p in products_at_tier]
     
     if total_products_at_tier == 0:
         return {
@@ -23,8 +33,8 @@ def compute_tier_cds(db_session: Session, claim_code: str, category_code: str, t
         }
     
     products_using_claim = sum(
-        1 for p in products_at_tier 
-        if p.claim_codes and claim_code in p.claim_codes
+        1 for p in all_products 
+        if p.get("claim_codes") and claim_code in p["claim_codes"]
     )
     
     tier_cds_score = (products_using_claim / total_products_at_tier) * 100

@@ -10,3 +10,5 @@ pytest
 pytest-asyncio
 jinja2
 xhtml2pdf
+requests
+beautifulsoup4
