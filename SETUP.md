@@ -49,7 +49,11 @@ The backend is built with FastAPI and requires a Python virtual environment.
    *Expected Output: Successful installation of fastapi, uvicorn, sqlalchemy, google-generativeai, etc.*
 
 4. Setup your Environment Variables:
-   Create a file named `.env` in the `backend/` directory and add your API key:
+   Copy the `.env.example` file to a new file named `.env` in the `backend/` directory and add your API key:
+   ```bash
+   cp .env.example .env
+   ```
+   Then open `.env` and paste your key:
    ```env
    GEMINI_API_KEY=your_actual_api_key_here
    ```
