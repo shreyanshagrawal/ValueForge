@@ -879,22 +879,22 @@ Take a final pass reviewing everything end to end as if you were a skeptical hac
 
 ## BATCH 20: Final Submission Package (Prompts 96-100)
 
-**96.**
+**96. [DONE]**
 ```
 Take screenshots (or guide me on which screens to screenshot myself) of all 5 main screens (Input Form, Failure Dashboard, Whitespace Grid, Authentic Territory, VP Cards) using a "Load Example" preset for consistent, clean demo data, and tell me exactly where to save them in the repo (e.g. /docs/screenshots/) and how to reference them in the README.
 ```
 
-**97.**
+**97. [DONE]**
 ```
 Double-check that a completely fresh clone of this repo (simulate by checking what files are tracked vs gitignored) plus following only the SETUP.md instructions would actually result in a working app, with no undocumented manual steps (e.g. a seed script that needs to be run manually but isn't mentioned, or an environment variable not listed in .env.example). Fix any gaps found in the documentation or add any missing automatic setup steps.
 ```
 
-**98.**
+**98. [DONE]**
 ```
 Create a one-page PITCH.md suitable for a hackathon submission form's "project description" field: project name, tagline, the problem in 2 sentences, the solution in 3-4 sentences emphasizing the 3-Dimension Whitespace Model as the key innovation, the tech stack used (be honest: FastAPI, React, SQLite, Google Gemini free tier), and what makes this distinctive versus a generic "AI content generator" (the Failure Dashboard shown before recommendations, and Brand Permission as a first-class dimension most positioning tools ignore).
 ```
 
-**99.**
+**99. [DONE]**
 ```
 Run one final complete smoke test of the entire application from a totally cold state (stop both servers, delete the DB, restart everything fresh per SETUP.md instructions exactly as written) and walk through the full demo flow one more time end to end. Report explicitly: did everything work with zero manual intervention beyond what SETUP.md documents? If anything required an undocumented fix, document it now.
 ```
