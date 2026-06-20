@@ -1,11 +1,11 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Optional, List
 
 class ScanCreateRequest(BaseModel):
     product_name: str
     category_code: str
     persona_code: str
-    primary_benefit_idea: str
+    primary_benefit_idea: str = Field(..., max_length=1000)
     key_ingredient: Optional[str] = None
     target_price_tier: str
     use_live_data: bool = False

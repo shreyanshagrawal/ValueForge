@@ -34,6 +34,8 @@ async def global_exception_handler(request: Request, exc: Exception):
 
 origins = [
     "http://localhost:5173",
+    # NOTE: CORS is currently scoped to Vite's local dev server. 
+    # Must be updated with production domains before deployment.
 ]
 
 app.add_middleware(

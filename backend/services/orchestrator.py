@@ -12,6 +12,14 @@ from models.models import Claim
 from services.nlp_extractor import extract_claim_signals
 
 def run_full_scan_background(scan_id: str):
+    """
+    Background task wrapper that executes the full end-to-end whitespace pipeline.
+    It manages its own DB session, updates the ScanSession status incrementally 
+    so the frontend can poll, and extracts claims from the user's primary benefit idea.
+    
+    Args:
+        scan_id (str): The UUID of the ScanSession created by the POST endpoint.
+    """
     db_session = SessionLocal()
     try:
         scan_session = db_session.query(ScanSession).filter(ScanSession.id == scan_id).first()
@@ -35,6 +43,24 @@ def run_full_scan_background(scan_id: str):
         db_session.close()
 
 def run_full_scan(db_session: Session, scan_session: ScanSession) -> list[dict]:
+    """
+    Executes the core whitespace analysis pipeline for a given scan session.
+    
+    This function performs the following steps:
+    1. Fetches candidate claims based on the target category.
+    2. Computes scores across all three dimensions (Market, Consumer, Brand) for each claim.
+    3. Calculates the Final Opportunity Score (FOS) and Whitespace Classification.
+    4. Evaluates the user's extracted claims for misalignment flags.
+    5. Matches the product concept against historical failure cases.
+    6. Generates final synthesized Value Proposition cards.
+    
+    Args:
+        db_session (Session): The active SQLAlchemy session.
+        scan_session (ScanSession): The current scan session object.
+        
+    Returns:
+        list[dict]: A sorted list of dictionaries representing the scored candidate claims.
+    """
     scan_session.status = "scoring_claims"
     db_session.commit()
     # 1. Fetch persona
