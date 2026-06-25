@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { AlertTriangle, Info, ArrowRight, ShieldAlert, BadgeX, TrendingDown, Users2, Clock4, Truck, Building2, Check } from "lucide-react";
+import { AlertTriangle, Info, ArrowRight, ShieldAlert, BadgeX, TrendingDown, Users2, Clock4, Truck, Building2, Check, Loader2 } from "lucide-react";
 import { Button } from "../components/ui/Button";
 import { useNavigate, useParams } from "react-router-dom";
-import { Carousel, CarouselContent, CarouselItem, CarouselNavigation, CarouselIndicator } from "../components/ui/carousel";
 import { api } from "../lib/api";
 import StepperNav from "../components/StepperNav";
 
@@ -16,11 +15,13 @@ const reasonConfig: Record<string, { label: string, icon: React.ElementType, col
   market_not_ready: { label: "Market Not Ready", icon: Clock4, colorClass: "text-[#EAB308] bg-[#EAB308]/10 border-[#EAB308]/30" },
   distribution_failure: { label: "Distribution Failure", icon: Truck, colorClass: "text-[#D946EF] bg-[#D946EF]/10 border-[#D946EF]/30" },
   brand_permission_gap: { label: "Brand Permission Gap", icon: Building2, colorClass: "text-[#EC4899] bg-[#EC4899]/10 border-[#EC4899]/30" },
+  market_saturation: { label: "Market Saturation", icon: TrendingDown, colorClass: "text-[#F59E0B] bg-[#F59E0B]/10 border-[#F59E0B]/30" },
+  permission_gap: { label: "Permission Gap", icon: Building2, colorClass: "text-[#EC4899] bg-[#EC4899]/10 border-[#EC4899]/30" },
 };
 
 const fallbackFailures = [
   {
-    id: 1,
+    id: "fallback-1",
     positioning: "High Protein Enriched Snack",
     product_name: "ProFit Crunch Bar",
     similarity_score: 84,
@@ -30,7 +31,7 @@ const fallbackFailures = [
     summary: "Product tasted chalky and failed to deliver on 'indulgent' promise.",
   },
   {
-    id: 2,
+    id: "fallback-2",
     positioning: "Premium Vegan Energy Bite",
     product_name: "PurePower Vegan Bites",
     similarity_score: 71,
@@ -40,7 +41,7 @@ const fallbackFailures = [
     summary: "Too expensive for the perceived value.",
   },
   {
-    id: 3,
+    id: "fallback-3",
     positioning: "Natural Focus Bar",
     product_name: "FocusEdge Nootropic Bar",
     similarity_score: 63,
@@ -51,6 +52,17 @@ const fallbackFailures = [
   },
 ];
 
+type FailureItem = {
+  id: string | number;
+  positioning: string;
+  product_name: string;
+  similarity_score: number;
+  reasonKey: string;
+  secondaryReasonKey: string;
+  lesson: string;
+  summary: string;
+};
+
 const containerVariants = {
   hidden: { opacity: 0 },
   show: {
@@ -60,7 +72,7 @@ const containerVariants = {
 };
 
 const cardVariants = {
-  hidden: { opacity: 0, y: 40, scale: 0.9 },
+  hidden: { opacity: 0, y: 40, scale: 0.95 },
   show: { opacity: 1, y: 0, scale: 1, transition: { type: "spring" as const, stiffness: 150, damping: 20 } },
 };
 
@@ -68,41 +80,56 @@ export default function FailureDashboard() {
   const { scanId } = useParams();
   const basePath = scanId ? `/scan/${scanId}` : "";
   const navigate = useNavigate();
-  const [index, setIndex] = useState(0);
-  const [failuresData, setFailuresData] = useState(fallbackFailures);
+  const [failuresData, setFailuresData] = useState<FailureItem[]>(fallbackFailures);
   const [acknowledged, setAcknowledged] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (scanId) {
+      setLoading(true);
+      setError(null);
       api.getFailureRisks(scanId)
         .then(res => {
-          const rawFailures = res.failures || res;
-          if (!rawFailures || rawFailures.length === 0) {
+          // The backend returns a flat array of FailureMatchResponse objects
+          const rawFailures = Array.isArray(res) ? res : (res.failures || res);
+          if (!rawFailures || !Array.isArray(rawFailures) || rawFailures.length === 0) {
             setFailuresData(fallbackFailures);
             return;
           }
-          const formattedFailures = rawFailures.map((item: any, index: number) => {
+          const formattedFailures: FailureItem[] = rawFailures.map((item: any, idx: number) => {
             if (item.failure_case) {
               return {
-                id: item.id || index,
-                positioning: item.failure_case.positioning_used,
-                product_name: item.failure_case.product_name,
-                similarity_score: Math.round(item.similarity_score),
-                reasonKey: item.failure_case.failure_reason_type,
-                secondaryReasonKey: "market_not_ready", // Fallback since backend only has 1 reason
-                lesson: item.failure_case.lesson_learned,
-                summary: item.failure_case.failure_summary
+                id: item.id || `match-${idx}`,
+                positioning: item.failure_case.positioning_used || "Unknown positioning",
+                product_name: item.failure_case.product_name || "Unknown product",
+                similarity_score: Math.round(item.similarity_score || 0),
+                reasonKey: item.failure_case.failure_reason_type || "taste_mismatch",
+                secondaryReasonKey: "market_not_ready",
+                lesson: item.failure_case.lesson_learned || "No lesson recorded.",
+                summary: item.failure_case.failure_summary || item.failure_case.lesson_learned || "No summary available.",
               };
             }
-            // For fallback mock data, we need to ensure summary exists if possible
+            // Direct item (already formatted or fallback shape)
             return {
-               ...item,
-               summary: item.summary || item.lesson
+              id: item.id || `item-${idx}`,
+              positioning: item.positioning || item.positioning_used || "Unknown positioning",
+              product_name: item.product_name || "Unknown product",
+              similarity_score: Math.round(item.similarity_score || 0),
+              reasonKey: item.reasonKey || item.failure_reason_type || "taste_mismatch",
+              secondaryReasonKey: item.secondaryReasonKey || "market_not_ready",
+              lesson: item.lesson || item.lesson_learned || "No lesson recorded.",
+              summary: item.summary || item.failure_summary || item.lesson || "No summary available.",
             };
           });
           setFailuresData(formattedFailures);
         })
-        .catch(err => console.error("Failed to fetch failures, using fallback", err));
+        .catch(err => {
+          console.error("Failed to fetch failures, using fallback", err);
+          setError("Could not load failure data from backend. Showing example data.");
+          setFailuresData(fallbackFailures);
+        })
+        .finally(() => setLoading(false));
     }
   }, [scanId]);
 
@@ -136,6 +163,7 @@ export default function FailureDashboard() {
         initial="hidden"
         animate="show"
       >
+        {/* Header */}
         <div className="text-center mb-16">
           <motion.div 
             initial={{ scale: 0, opacity: 0 }}
@@ -156,96 +184,121 @@ export default function FailureDashboard() {
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#EF4444] to-[#F97316]">let's look at what failed.</span>
           </h1>
           <p className="text-[#9CA3AF] text-xl max-w-3xl mx-auto font-medium leading-relaxed">
-            Our semantic engine matched your idea against <span className="text-white font-bold">500+ failed product launches</span>. We found 3 historical patterns with nearly identical positioning that crashed in the market.
+            Our semantic engine matched your idea against <span className="text-white font-bold">500+ failed product launches</span>. We found {failuresData.length} historical patterns with nearly identical positioning that crashed in the market.
           </p>
         </div>
 
-        <div className="w-full relative mb-16 pb-12">
-          <Carousel index={index} onIndexChange={setIndex}>
-            <CarouselContent className="relative py-4 -mx-4 px-4">
-              {failuresData.map((failure) => {
-                const primaryReason = reasonConfig[failure.reasonKey] || reasonConfig["taste_mismatch"];
-                const secondaryReason = reasonConfig[failure.secondaryReasonKey] || reasonConfig["market_not_ready"];
-                const PrimaryIcon = primaryReason.icon;
-                
-                return (
-                  <CarouselItem key={failure.id} className="w-full md:w-1/2 lg:w-1/3 px-4">
-                    <motion.div variants={cardVariants} className="h-full">
-                      <div className="h-full flex flex-col bg-[#211C2B]/80 backdrop-blur-2xl rounded-3xl border border-white/5 overflow-hidden relative group transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_60px_rgba(239,68,68,0.15)] hover:border-[#EF4444]/30">
-                        
-                        {/* Glowing Top Edge */}
-                        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#EF4444] to-transparent opacity-50 group-hover:opacity-100 transition-opacity" />
+        {/* Error Banner */}
+        {error && (
+          <motion.div 
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-8 p-4 rounded-xl bg-[#F97316]/10 border border-[#F97316]/30 text-[#F97316] text-sm font-medium text-center max-w-2xl mx-auto"
+          >
+            {error}
+          </motion.div>
+        )}
 
-                        <div className="p-8 pb-6 border-b border-white/[0.06] relative">
-                          {/* Ambient card glow */}
-                          <div className="absolute -top-10 -right-10 w-40 h-40 bg-[#EF4444]/10 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                          
-                        {/* Product name + similarity score */}
-                          <div className="flex items-center gap-3 mb-6 relative z-10">
-                            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black uppercase tracking-widest bg-[#EF4444]/10 text-[#EF4444] border border-[#EF4444]/20">
-                              {failure.similarity_score ?? 0}% pattern match
-                            </span>
-                            {failure.product_name && (
-                              <span className="text-[#9CA3AF] text-xs font-semibold">
-                                Failed product: <span className="text-white font-bold">{failure.product_name}</span>
-                              </span>
-                            )}
-                          </div>
-                          <div className="flex gap-3 flex-wrap mb-6 relative z-10">
-                            <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-black uppercase tracking-widest border ${primaryReason.colorClass}`}>
-                              <PrimaryIcon className="w-4 h-4" />
-                              {failure.reasonKey.replace(/_/g, " ")}
-                            </div>
-                            <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest border ${secondaryReason.colorClass} opacity-80`}>
-                              {failure.secondaryReasonKey.replace(/_/g, " ")}
-                            </div>
-                          </div>
-                          
-                          <span className="text-[#6B7280] text-xs font-bold uppercase tracking-[0.2em] block mb-2">Positioning Used</span>
-                          <h3 className="text-2xl text-[#F5F2EF] font-black leading-snug">"{failure.positioning}"</h3>
+        {/* Loading State */}
+        {loading && (
+          <div className="flex flex-col items-center justify-center py-20 gap-4">
+            <Loader2 className="w-10 h-10 text-[#EF4444] animate-spin" />
+            <p className="text-[#9CA3AF] text-lg font-medium">Loading failure analysis...</p>
+          </div>
+        )}
+
+        {/* Failure Cards Grid — always visible, no carousel */}
+        {!loading && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+            {failuresData.map((failure, idx) => {
+              const primaryReason = reasonConfig[failure.reasonKey] || reasonConfig["taste_mismatch"];
+              const secondaryReason = reasonConfig[failure.secondaryReasonKey] || reasonConfig["market_not_ready"];
+              const PrimaryIcon = primaryReason.icon;
+              
+              return (
+                <motion.div 
+                  key={failure.id} 
+                  variants={cardVariants}
+                  className="h-full"
+                >
+                  <div className="h-full flex flex-col bg-[#211C2B]/80 backdrop-blur-2xl rounded-3xl border border-white/5 overflow-hidden relative group transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_60px_rgba(239,68,68,0.15)] hover:border-[#EF4444]/30">
+                    
+                    {/* Glowing Top Edge */}
+                    <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#EF4444] to-transparent opacity-50 group-hover:opacity-100 transition-opacity" />
+
+                    <div className="p-8 pb-6 border-b border-white/[0.06] relative">
+                      {/* Ambient card glow */}
+                      <div className="absolute -top-10 -right-10 w-40 h-40 bg-[#EF4444]/10 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                      
+                      {/* Product name + similarity score */}
+                      <div className="flex items-center gap-3 mb-6 relative z-10 flex-wrap">
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black uppercase tracking-widest bg-[#EF4444]/10 text-[#EF4444] border border-[#EF4444]/20">
+                          {failure.similarity_score ?? 0}% pattern match
+                        </span>
+                        {failure.product_name && (
+                          <span className="text-[#9CA3AF] text-xs font-semibold">
+                            Failed product: <span className="text-white font-bold">{failure.product_name}</span>
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex gap-3 flex-wrap mb-6 relative z-10">
+                        <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-black uppercase tracking-widest border ${primaryReason.colorClass}`}>
+                          <PrimaryIcon className="w-4 h-4" />
+                          {failure.reasonKey.replace(/_/g, " ")}
                         </div>
-
-                        <div className="p-8 pt-6 flex-1 bg-gradient-to-b from-transparent to-black/20 flex flex-col gap-6">
-                          
-                          {/* Why it Failed / Summary */}
-                          <div className="flex items-start gap-4">
-                            <div className="p-3 rounded-xl bg-white/5 border border-white/10 shrink-0 shadow-inner">
-                              <AlertTriangle className="w-5 h-5 text-[#EF4444]" />
-                            </div>
-                            <div>
-                              <span className="block text-[#E5E7EB] text-sm font-bold tracking-wide mb-2 uppercase">Why it Failed</span>
-                              <p className="text-[15px] text-[#9CA3AF] leading-relaxed font-medium">{failure.summary || failure.lesson}</p>
-                            </div>
-                          </div>
-
-                          {/* Lesson Learned */}
-                          <div className="flex items-start gap-4">
-                            <div className="p-3 rounded-xl bg-white/5 border border-white/10 shrink-0 shadow-inner">
-                              <Info className="w-5 h-5 text-[#8B4CFF]" />
-                            </div>
-                            <div>
-                              <span className="block text-[#E5E7EB] text-sm font-bold tracking-wide mb-2 uppercase">Lesson Learned</span>
-                              <p className="text-[15px] text-[#9CA3AF] leading-relaxed font-medium">{failure.lesson}</p>
-                            </div>
-                          </div>
-                          
+                        <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest border ${secondaryReason.colorClass} opacity-80`}>
+                          {failure.secondaryReasonKey.replace(/_/g, " ")}
                         </div>
                       </div>
-                    </motion.div>
-                  </CarouselItem>
-                );
-              })}
-            </CarouselContent>
-            <div className="hidden md:block">
-              <CarouselNavigation 
-                alwaysShow={true} 
-                classNameButton="bg-[#211C2B] hover:bg-[#EF4444] border border-white/10 text-white transition-colors duration-300"
-              />
-            </div>
-            <CarouselIndicator classNameButton="bg-white/20 dark:bg-white/20 aria-selected:bg-[#EF4444]" />
-          </Carousel>
-        </div>
+                      
+                      <span className="text-[#6B7280] text-xs font-bold uppercase tracking-[0.2em] block mb-2">Positioning Used</span>
+                      <h3 className="text-2xl text-[#F5F2EF] font-black leading-snug">"{failure.positioning}"</h3>
+                    </div>
 
+                    <div className="p-8 pt-6 flex-1 bg-gradient-to-b from-transparent to-black/20 flex flex-col gap-6">
+                      
+                      {/* Why it Failed / Summary */}
+                      <div className="flex items-start gap-4">
+                        <div className="p-3 rounded-xl bg-white/5 border border-white/10 shrink-0 shadow-inner">
+                          <AlertTriangle className="w-5 h-5 text-[#EF4444]" />
+                        </div>
+                        <div>
+                          <span className="block text-[#E5E7EB] text-sm font-bold tracking-wide mb-2 uppercase">Why it Failed</span>
+                          <p className="text-[15px] text-[#9CA3AF] leading-relaxed font-medium">{failure.summary}</p>
+                        </div>
+                      </div>
+
+                      {/* Lesson Learned */}
+                      <div className="flex items-start gap-4">
+                        <div className="p-3 rounded-xl bg-white/5 border border-white/10 shrink-0 shadow-inner">
+                          <Info className="w-5 h-5 text-[#8B4CFF]" />
+                        </div>
+                        <div>
+                          <span className="block text-[#E5E7EB] text-sm font-bold tracking-wide mb-2 uppercase">Lesson Learned</span>
+                          <p className="text-[15px] text-[#9CA3AF] leading-relaxed font-medium">{failure.lesson}</p>
+                        </div>
+                      </div>
+                      
+                    </div>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+        )}
+
+        {/* Empty state */}
+        {!loading && failuresData.length === 0 && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-center py-16 mb-16"
+          >
+            <p className="text-[#9CA3AF] text-lg font-medium">No strong historical failure patterns detected for this concept.</p>
+          </motion.div>
+        )}
+
+        {/* Acknowledgement Section */}
         <motion.div 
           className="flex flex-col items-center gap-6 bg-[#1A1333]/90 p-10 rounded-[2rem] border border-[#EF4444]/20 backdrop-blur-xl max-w-2xl mx-auto shadow-[0_0_50px_rgba(239,68,68,0.1)] relative overflow-hidden"
           initial={{ opacity: 0, y: 30 }}
@@ -295,3 +348,4 @@ export default function FailureDashboard() {
     </div>
   );
 }
+
