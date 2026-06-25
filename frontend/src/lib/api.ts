@@ -1,4 +1,7 @@
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1';
+let API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1';
+if (!API_URL.endsWith('/api/v1')) {
+  API_URL = API_URL.replace(/\/$/, '') + '/api/v1';
+}
 
 async function fetchAPI(endpoint: string, options: RequestInit = {}) {
   const url = `${API_URL}${endpoint}`;
