@@ -5,7 +5,7 @@ import { Info, Maximize2 } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent } from "../components/ui/Card";
 import { Badge } from "../components/ui/Badge";
 import { Button } from "../components/ui/Button";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 // Sample Data
 const data = [
@@ -35,7 +35,7 @@ const CustomShape = (props: any) => {
   if (payload.type === "user_idea") {
     const outerRadius = size * 1.8;
     const innerRadius = size * 0.8;
-    let points = [];
+    const points = [];
     for (let i = 0; i < 10; i++) {
       const radius = i % 2 === 0 ? outerRadius : innerRadius;
       const angle = (Math.PI * 2 * i) / 10 - Math.PI / 2;
@@ -114,6 +114,8 @@ const CustomTooltip = ({ active, payload }: any) => {
 };
 
 export default function CompetitiveMap() {
+  const { scanId } = useParams();
+  const basePath = scanId ? `/scan/${scanId}` : "";
   return (
     <div className="min-h-[calc(100vh-70px)] bg-[#F8F4FF] p-4 md:p-8 pb-32 font-sans selection:bg-[#8B4CFF] selection:text-white relative overflow-hidden">
       {/* ── Dynamic Background Grid (1st Page Theme) ── */}
@@ -140,14 +142,14 @@ export default function CompetitiveMap() {
       >
         {/* Navigation Tabs */}
         <div className="flex border-b border-[#E8DFF5] overflow-x-auto hide-scrollbar">
-          <Link to="/value-props" className="px-6 py-4 font-bold text-[#7D7098] hover:text-[#8B4CFF] transition-colors whitespace-nowrap text-[16px]">Value Propositions</Link>
+          <Link to={`${basePath}/value-props`} className="px-6 py-4 font-bold text-[#7D7098] hover:text-[#8B4CFF] transition-colors whitespace-nowrap text-[16px]">Value Propositions</Link>
           <div className="relative px-6 py-4 font-bold text-[#8B4CFF] whitespace-nowrap text-[16px]">
             Competitive Map
             <motion.div layoutId="tab-indicator" className="absolute bottom-0 left-6 right-6 h-[4px] bg-[#8B4CFF] rounded-t-[4px]" />
           </div>
-          <Link to="/whitespace-grid" className="px-6 py-4 font-bold text-[#7D7098] hover:text-[#8B4CFF] transition-colors whitespace-nowrap text-[16px]">Whitespace Grid</Link>
-          <Link to="/authentic-claim" className="px-6 py-4 font-bold text-[#7D7098] hover:text-[#8B4CFF] transition-colors whitespace-nowrap text-[16px]">Authentic Claim Territory</Link>
-          <Link to="/brand-brief" className="px-6 py-4 font-bold text-[#7D7098] hover:text-[#8B4CFF] transition-colors whitespace-nowrap text-[16px]">Brand Brief</Link>
+          <Link to={`${basePath}/grid`} className="px-6 py-4 font-bold text-[#7D7098] hover:text-[#8B4CFF] transition-colors whitespace-nowrap text-[16px]">Whitespace Grid</Link>
+          <Link to={`${basePath}/territory`} className="px-6 py-4 font-bold text-[#7D7098] hover:text-[#8B4CFF] transition-colors whitespace-nowrap text-[16px]">Authentic Claim Territory</Link>
+          <Link to={`${basePath}/brand-brief`} className="px-6 py-4 font-bold text-[#7D7098] hover:text-[#8B4CFF] transition-colors whitespace-nowrap text-[16px]">Brand Brief</Link>
         </div>
 
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4">

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import {
   FileDown, FileText, Clock, AlertTriangle, CheckCircle2, TrendingUp,
   ShieldAlert, Download, Eye, ChevronDown, ChevronUp, AlertOctagon, Star
@@ -361,6 +361,8 @@ function ExportModal({ onClose }: { onClose: () => void }) {
 // PAGE
 // ─────────────────────────────────────────────
 export default function BrandBrief() {
+  const { scanId } = useParams();
+  const basePath = scanId ? `/scan/${scanId}` : "";
   const [openSections, setOpenSections] = useState<Set<string>>(new Set(["value_props"]));
   const [showExport, setShowExport] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
@@ -384,7 +386,11 @@ export default function BrandBrief() {
   const toggle = (id: string) => {
     setOpenSections(prev => {
       const next = new Set(prev);
-      next.has(id) ? next.delete(id) : next.add(id);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
       return next;
     });
   };
@@ -413,10 +419,10 @@ export default function BrandBrief() {
       >
         {/* Navigation Tabs */}
         <div className="flex border-b border-[#E8DFF5] overflow-x-auto hide-scrollbar">
-          <Link to="/value-props" className="px-6 py-4 font-bold text-[#7D7098] hover:text-[#8B4CFF] transition-colors whitespace-nowrap text-[16px]">Value Propositions</Link>
-          <Link to="/competitive-map" className="px-6 py-4 font-bold text-[#7D7098] hover:text-[#8B4CFF] transition-colors whitespace-nowrap text-[16px]">Competitive Map</Link>
-          <Link to="/whitespace-grid" className="px-6 py-4 font-bold text-[#7D7098] hover:text-[#8B4CFF] transition-colors whitespace-nowrap text-[16px]">Whitespace Grid</Link>
-          <Link to="/authentic-claim" className="px-6 py-4 font-bold text-[#7D7098] hover:text-[#8B4CFF] transition-colors whitespace-nowrap text-[16px]">Authentic Claim Territory</Link>
+          <Link to={`${basePath}/value-props`} className="px-6 py-4 font-bold text-[#7D7098] hover:text-[#8B4CFF] transition-colors whitespace-nowrap text-[16px]">Value Propositions</Link>
+          <Link to={`${basePath}/competitive-map`} className="px-6 py-4 font-bold text-[#7D7098] hover:text-[#8B4CFF] transition-colors whitespace-nowrap text-[16px]">Competitive Map</Link>
+          <Link to={`${basePath}/grid`} className="px-6 py-4 font-bold text-[#7D7098] hover:text-[#8B4CFF] transition-colors whitespace-nowrap text-[16px]">Whitespace Grid</Link>
+          <Link to={`${basePath}/territory`} className="px-6 py-4 font-bold text-[#7D7098] hover:text-[#8B4CFF] transition-colors whitespace-nowrap text-[16px]">Authentic Claim Territory</Link>
           <div className="relative px-6 py-4 font-bold text-[#8B4CFF] whitespace-nowrap text-[16px]">
             Brand Brief
             <motion.div layoutId="tab-indicator" className="absolute bottom-0 left-6 right-6 h-[4px] bg-[#8B4CFF] rounded-t-[4px]" />

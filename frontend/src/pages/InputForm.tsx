@@ -80,7 +80,7 @@ export default function InputForm() {
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
   // false = chat (front), true = form (back)
-  const [isFlipped, setIsFlipped] = useState(false);
+  const [isFlipped, setIsFlipped] = useState(true);
 
   // ── Options State ─────────────────────────
   const [categories, setCategories] = useState<{value: string, label: string}[]>([]);
@@ -117,7 +117,7 @@ export default function InputForm() {
       setFormData({
         productName: "ImmunoProtein Bar",
         category: "protein_bars",
-        persona: "urban_health",
+        persona: "urban_health_seeker",
         priceTier: "mass",
         benefitIdea: "High protein bar with immune-boosting capabilities for daily urban health.",
         keyIngredient: "Whey Isolate + Vitamin C"
@@ -157,8 +157,10 @@ export default function InputForm() {
       api.getCategories().catch(() => []),
       api.getPersonas().catch(() => [])
     ]).then(([catRes, perRes]) => {
-      setCategories(catRes.categories || catRes || []);
-      setPersonas(perRes.personas || perRes || []);
+      const cats = catRes.categories || catRes || [];
+      const pers = perRes.personas || perRes || [];
+      setCategories(cats.map((c: any) => ({ value: c.code || c.value, label: c.display_name || c.label })));
+      setPersonas(pers.map((p: any) => ({ value: p.code || p.value, label: p.display_name || p.label })));
     });
 
     api.getScans().then((res: any) => {
@@ -362,7 +364,7 @@ export default function InputForm() {
               </h4>
               <div className="space-y-3">
                 {recentScans.map((scan, i) => (
-                  <div key={i} onClick={() => navigate(`/scan/${scan.id}/whitespace-grid`)} className="bg-[#1A1333]/60 border border-white/5 p-3 rounded-xl cursor-pointer hover:bg-[#1A1333] transition">
+                  <div key={i} onClick={() => navigate(`/scan/${scan.id}/failures`)} className="bg-[#1A1333]/60 border border-white/5 p-3 rounded-xl cursor-pointer hover:bg-[#1A1333] transition">
                     <div className="flex justify-between items-center mb-1">
                       <span className="font-bold text-white text-sm">{scan.productName}</span>
                       <span className="text-[#34D399] text-xs font-bold">{scan.status}</span>

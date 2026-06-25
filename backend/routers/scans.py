@@ -47,6 +47,18 @@ def create_scan(request: ScanCreateRequest, background_tasks: BackgroundTasks, d
 def get_scan(scan_id: str, db: Session = Depends(get_db)):
     scan = db.query(ScanSession).filter(ScanSession.id == scan_id).first()
     if not scan:
+        if scan_id in ["demo", "scan_2"]:
+            return {
+                "id": scan_id,
+                "product_name": "Zen Focus Bar" if scan_id == "scan_2" else "VitaBoost Pro",
+                "category_code": "protein_bars" if scan_id == "scan_2" else "protein_bars",
+                "persona_code": "office_worker" if scan_id == "scan_2" else "fitness_enthusiast",
+                "primary_benefit_idea": "Focus and productivity" if scan_id == "scan_2" else "Energy and recovery",
+                "key_ingredient": "Ashwagandha" if scan_id == "scan_2" else "Whey protein",
+                "target_price_tier": "premium",
+                "status": "completed",
+                "data_source": "seed"
+            }
         raise HTTPException(status_code=404, detail="Scan not found")
     return scan
 

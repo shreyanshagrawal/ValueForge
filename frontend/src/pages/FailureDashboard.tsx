@@ -27,6 +27,7 @@ const fallbackFailures = [
     reasonKey: "taste_mismatch",
     secondaryReasonKey: "claim_not_believed",
     lesson: "Consumers rejected 'high protein' claims from a traditionally indulgent brand because the texture was heavily compromised without a clear health payoff.",
+    summary: "Product tasted chalky and failed to deliver on 'indulgent' promise.",
   },
   {
     id: 2,
@@ -36,6 +37,7 @@ const fallbackFailures = [
     reasonKey: "price_value_disconnect",
     secondaryReasonKey: "persona_wrong",
     lesson: "Positioned at an ultra-premium price tier, but lacked the clinically-tested efficacy claims demanded by the 'Fitness Millennial' persona.",
+    summary: "Too expensive for the perceived value.",
   },
   {
     id: 3,
@@ -45,6 +47,7 @@ const fallbackFailures = [
     reasonKey: "brand_permission_gap",
     secondaryReasonKey: "market_not_ready",
     lesson: "Brand had zero historical equity in cognitive health. Consumers fundamentally distrusted the functional focus claim coming from a snack brand.",
+    summary: "Consumers didn't trust the brand to deliver nootropic benefits.",
   },
 ];
 
@@ -72,7 +75,33 @@ export default function FailureDashboard() {
   useEffect(() => {
     if (scanId) {
       api.getFailureRisks(scanId)
-        .then(res => setFailuresData(res.failures || res))
+        .then(res => {
+          const rawFailures = res.failures || res;
+          if (!rawFailures || rawFailures.length === 0) {
+            setFailuresData(fallbackFailures);
+            return;
+          }
+          const formattedFailures = rawFailures.map((item: any, index: number) => {
+            if (item.failure_case) {
+              return {
+                id: item.id || index,
+                positioning: item.failure_case.positioning_used,
+                product_name: item.failure_case.product_name,
+                similarity_score: Math.round(item.similarity_score),
+                reasonKey: item.failure_case.failure_reason_type,
+                secondaryReasonKey: "market_not_ready", // Fallback since backend only has 1 reason
+                lesson: item.failure_case.lesson_learned,
+                summary: item.failure_case.failure_summary
+              };
+            }
+            // For fallback mock data, we need to ensure summary exists if possible
+            return {
+               ...item,
+               summary: item.summary || item.lesson
+            };
+          });
+          setFailuresData(formattedFailures);
+        })
         .catch(err => console.error("Failed to fetch failures, using fallback", err));
     }
   }, [scanId]);
@@ -135,8 +164,8 @@ export default function FailureDashboard() {
           <Carousel index={index} onIndexChange={setIndex}>
             <CarouselContent className="relative py-4 -mx-4 px-4">
               {failuresData.map((failure) => {
-                const primaryReason = reasonConfig[failure.reasonKey];
-                const secondaryReason = reasonConfig[failure.secondaryReasonKey];
+                const primaryReason = reasonConfig[failure.reasonKey] || reasonConfig["taste_mismatch"];
+                const secondaryReason = reasonConfig[failure.secondaryReasonKey] || reasonConfig["market_not_ready"];
                 const PrimaryIcon = primaryReason.icon;
                 
                 return (
@@ -176,16 +205,30 @@ export default function FailureDashboard() {
                           <h3 className="text-2xl text-[#F5F2EF] font-black leading-snug">"{failure.positioning}"</h3>
                         </div>
 
-                        <div className="p-8 pt-6 flex-1 bg-gradient-to-b from-transparent to-black/20">
+                        <div className="p-8 pt-6 flex-1 bg-gradient-to-b from-transparent to-black/20 flex flex-col gap-6">
+                          
+                          {/* Why it Failed / Summary */}
                           <div className="flex items-start gap-4">
                             <div className="p-3 rounded-xl bg-white/5 border border-white/10 shrink-0 shadow-inner">
-                              <Info className="w-5 h-5 text-[#9CA3AF]" />
+                              <AlertTriangle className="w-5 h-5 text-[#EF4444]" />
+                            </div>
+                            <div>
+                              <span className="block text-[#E5E7EB] text-sm font-bold tracking-wide mb-2 uppercase">Why it Failed</span>
+                              <p className="text-[15px] text-[#9CA3AF] leading-relaxed font-medium">{failure.summary || failure.lesson}</p>
+                            </div>
+                          </div>
+
+                          {/* Lesson Learned */}
+                          <div className="flex items-start gap-4">
+                            <div className="p-3 rounded-xl bg-white/5 border border-white/10 shrink-0 shadow-inner">
+                              <Info className="w-5 h-5 text-[#8B4CFF]" />
                             </div>
                             <div>
                               <span className="block text-[#E5E7EB] text-sm font-bold tracking-wide mb-2 uppercase">Lesson Learned</span>
                               <p className="text-[15px] text-[#9CA3AF] leading-relaxed font-medium">{failure.lesson}</p>
                             </div>
                           </div>
+                          
                         </div>
                       </div>
                     </motion.div>
@@ -242,11 +285,10 @@ export default function FailureDashboard() {
           
           <Button 
             disabled={!acknowledged}
-            className="w-full sm:w-auto h-[60px] px-10 bg-transparent border-2 border-[#FFB64D] disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#FFB64D]/10 text-[#FFB64D] rounded-full transition-all duration-300 flex items-center justify-center gap-3" 
-            onClick={() => navigate(scanId ? `${basePath}/risk-flags` : "/design/risk-flags")}
+            className="flex items-center gap-2 px-6 py-3 bg-[#8B4CFF] hover:bg-[#7C3AED] disabled:bg-gray-300 disabled:text-gray-500 text-white rounded-full font-bold transition-all"
+            onClick={() => navigate(scanId ? `${basePath}/grid` : "/design/grid")}
           >
-            <span className="text-[15px] font-bold uppercase tracking-[0.08em]">I Understand the Risks — View Details</span>
-            <ArrowRight className="w-5 h-5" />
+            Continue to Whitespace Maps <ArrowRight className="w-5 h-5" />
           </Button>
         </motion.div>
       </motion.div>

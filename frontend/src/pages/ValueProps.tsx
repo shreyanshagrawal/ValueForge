@@ -429,7 +429,48 @@ export default function ValueProps() {
   useEffect(() => {
     if (scanId) {
       api.getValuePropositions(scanId)
-        .then(res => setVpsData(res.propositions || res))
+        .then(res => {
+          const rawVps = res.propositions || res;
+          if (!rawVps || rawVps.length === 0) {
+            setVpsData(fallbackVps);
+            return;
+          }
+          const formattedVps: VP[] = rawVps.map((item: any, i: number) => {
+            if (item.subclaims && Array.isArray(item.subclaims)) return item;
+            
+            const wsClass = item.whitespace_classification === "true_whitespace" ? "True Whitespace" 
+                          : item.whitespace_classification === "conditional" ? "Conditional Whitespace" 
+                          : "Contested";
+            
+            return {
+              id: item.id || i,
+              whitespace: wsClass,
+              headline: item.headline,
+              subclaims: [item.subclaim_1, item.subclaim_2].filter(Boolean),
+              fos: Math.round(item.fos_score || 0),
+              tierCds: Math.round(item.tier_cds_score || 0),
+              crs: Math.round(item.crs_score || 0),
+              crsFilters: [
+                { label: "Relevance", score: Math.round(item.crs_relevance || 0) },
+                { label: "Believability", score: Math.round(item.crs_believability || 0) },
+                { label: "Fatigue Inverse", score: Math.round(item.crs_fatigue_inverse || 0) },
+                { label: "Trigger Alignment", score: Math.round(item.crs_trigger_alignment || 0) },
+              ],
+              bps: Math.round(item.bps_score || 0),
+              trend: item.trend_direction || "stable",
+              ingredients: Array.isArray(item.hero_ingredients) ? item.hero_ingredients.join(" + ") : (item.hero_ingredients || ""),
+              ingredientRationale: item.ingredient_rationale || "",
+              format: item.recommended_format || "",
+              packaging: item.packaging_direction || "",
+              price: `₹${item.price_band_min || 0}–${item.price_band_max || 0}`,
+              tier: item.cds_zone === "saturated" ? "Mass Market" : "Premium",
+              window: parseInt(item.first_mover_window) || 6,
+              channels: item.channel_fit || [],
+              flags: [] 
+            };
+          });
+          setVpsData(formattedVps);
+        })
         .catch(err => console.error("Failed to fetch VPs", err));
     }
   }, [scanId]);

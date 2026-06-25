@@ -382,6 +382,22 @@ export default function AuthenticClaimTerritory() {
 
           </div>
         </div>
+
+        {/* ── Navigation Actions ── */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+          className="flex justify-end mt-12 relative z-20"
+        >
+          <button
+            onClick={() => window.location.href = scanId ? `/scan/${scanId}/propositions` : "/design/brand-brief"}
+            className="flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-[#8B4CFF] to-[#6D28D9] text-white rounded-full font-black uppercase tracking-widest text-sm shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all"
+          >
+            Continue to Value Propositions
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+          </button>
+        </motion.div>
       </motion.div>
     </div>
   );

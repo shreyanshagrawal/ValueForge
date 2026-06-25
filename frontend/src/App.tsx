@@ -26,11 +26,12 @@ function GlobalNavbar() {
   const basePath = scanId ? `/scan/${scanId}` : "";
 
   const menuLinks = [
+    { name: "Failures", href: scanId ? `${basePath}/failures` : "/input" },
     { name: "Risk Flags", href: scanId ? `${basePath}/risk-flags` : "/design/risk-flags" },
-    { name: "Value Propositions", href: scanId ? `${basePath}/value-props` : "/input" },
     { name: "Competitive Map", href: scanId ? `${basePath}/competitive-map` : "/input" },
     { name: "Whitespace Grid", href: scanId ? `${basePath}/grid` : "/input" },
     { name: "Authentic Claim", href: scanId ? `${basePath}/territory` : "/input" },
+    { name: "Value Propositions", href: scanId ? `${basePath}/value-props` : "/input" },
     { name: "Brand Brief", href: scanId ? `${basePath}/brand-brief` : "/input" },
   ];
 
