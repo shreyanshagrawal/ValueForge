@@ -210,7 +210,7 @@ export default function FailureDashboard() {
         {/* Failure Cards Grid — always visible, no carousel */}
         {!loading && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
-            {failuresData.map((failure, idx) => {
+            {failuresData.map((failure) => {
               const primaryReason = reasonConfig[failure.reasonKey] || reasonConfig["taste_mismatch"];
               const secondaryReason = reasonConfig[failure.secondaryReasonKey] || reasonConfig["market_not_ready"];
               const PrimaryIcon = primaryReason.icon;
