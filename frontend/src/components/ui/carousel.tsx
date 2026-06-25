@@ -258,7 +258,7 @@ function CarouselContent({
       const visibleCount = entries.filter(
         (entry) => entry.isIntersecting
       ).length;
-      setVisibleItemsCount(visibleCount);
+      setVisibleItemsCount(Math.max(1, visibleCount));
     }, options);
 
     const childNodes = containerRef.current.children;
